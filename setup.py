@@ -43,7 +43,8 @@ def get_files(dir, ext=None):
 
 if sys.platform != 'win32':
     cwd = os.path.join(os.getcwd(), 'doc')
-    s = raw_input('Generate documentation? ')
+    #s = raw_input('Generate documentation? ')
+    s = 'y'
     if s.lower() == 'y' or s.lower() == 'YES':
         print 'Generating documentation'
         p = subprocess.Popen(['./make_docs', 'man', 'html', 'pdf', '-v'],
