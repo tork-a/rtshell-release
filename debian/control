@@ -1,0 +1,12 @@
+Source: ros-indigo-rtshell
+Section: misc
+Priority: extra
+Maintainer: Kei Okada <k-okada@jsk.t.u-tokyo.ac.jp>
+Build-Depends: debhelper (>= 9.0.0), omniidl-python, python-omniorb, python-omniorb-omg, python-setuptools, ros-indigo-catkin
+Homepage: http://ros.org/wiki/openrtm_tools
+Standards-Version: 3.9.2
+
+Package: ros-indigo-rtshell
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, 
+Description: Shell commands for managing RT-Middleware running on OpenRTM-aist.
