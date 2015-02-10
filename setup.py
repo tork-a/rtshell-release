@@ -180,7 +180,11 @@ class InstallConfigure(install_data):
             self.move_file(os.path.join(self.install_dir, 'share/rtshell',
                     'shell_support.in'), dest)
             with open(dest, 'a') as f:
-                f.writelines((cmd.format(dir=os.path.join(self.install_dir,
+                if self.root:
+                    rtshell_path = os.path.join('/',os.path.relpath(self.install_dir,self.root))
+                else:
+                    rtshell_path = self.install_dir
+                f.writelines((cmd.format(dir=os.path.join(rtshell_path,
                     'share/rtshell')), '\n'))
             self.config_bash_compl()
 
