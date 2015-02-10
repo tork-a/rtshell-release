@@ -1,7 +1,7 @@
-From 7329c8b78a33a1cd4c1e7e6814cf281d9fa0492f Mon Sep 17 00:00:00 2001
+From f81c7af25d1fe00b2729f27967358f8c494bc957 Mon Sep 17 00:00:00 2001
 From: Kei Okada <kei.okada@gmail.com>
 Date: Fri, 19 Dec 2014 17:37:33 +0900
-Subject: [PATCH] do not ask for users to generate doc
+Subject: [PATCH 1/2] do not ask for users to generate doc
 
 ---
  setup.py | 3 ++-

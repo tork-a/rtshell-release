@@ -1,0 +1,45 @@
+From 96c8bf1d5ed8ede120217247e8403b4e414dcf36 Mon Sep 17 00:00:00 2001
+From: Kei Okada <kei.okada@gmail.com>
+Date: Wed, 11 Feb 2015 01:07:24 +0900
+Subject: [PATCH 2/2] fix for path in rtshell-setup
+
+---
+ CMakeLists.txt | 2 +-
+ setup.py       | 8 +++++++-
+ 2 files changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 37039aa..b997298 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -12,7 +12,7 @@ add_custom_target(compile_rtshell ALL
+   WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
+ 
+ add_custom_target(install_rtshell
+-  COMMAND python setup.py install --prefix=$(DESTDIR)${CMAKE_INSTALL_PREFIX} ${SETUPTOOLS_ARG_EXTRA} --skip-build
++  COMMAND python setup.py install --prefix=${CMAKE_INSTALL_PREFIX} ${SETUPTOOLS_ARG_EXTRA} --root=/$(DESTDIR) --skip-build
+   WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
+ 
+ install(CODE "execute_process(COMMAND \"${CMAKE_COMMAND}\" --build \"${CMAKE_BINARY_DIR}\" --target install_rtshell)")
+diff --git a/setup.py b/setup.py
+index 0e447e4..28f0451 100644
+--- a/setup.py
++++ b/setup.py
+@@ -180,7 +180,13 @@ class InstallConfigure(install_data):
+             self.move_file(os.path.join(self.install_dir, 'share/rtshell',
+                     'shell_support.in'), dest)
+             with open(dest, 'a') as f:
+-                f.writelines((cmd.format(dir=os.path.join(self.install_dir,
++                if self.root:
++                    rtshell_path = os.path.join('/',os.path.relpath(self.install_dir,self.root))
++                else:
++                    rtshell_path = self.install_dir
++                print(cmd.format(dir=os.path.join(rtshell_path,
++                    'share/rtshell')), '\n')
++                f.writelines((cmd.format(dir=os.path.join(rtshell_path,
+                     'share/rtshell')), '\n'))
+             self.config_bash_compl()
+ 
+-- 
+1.9.1
+
