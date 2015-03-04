@@ -43,8 +43,7 @@ def get_files(dir, ext=None):
 
 if sys.platform != 'win32':
     cwd = os.path.join(os.getcwd(), 'doc')
-    #s = raw_input('Generate documentation? ')
-    s = 'y'
+    s = raw_input('Generate documentation? ')
     if s.lower() == 'y' or s.lower() == 'YES':
         print 'Generating documentation'
         p = subprocess.Popen(['./make_docs', 'man', 'html', 'pdf', '-v'],
@@ -180,11 +179,7 @@ class InstallConfigure(install_data):
             self.move_file(os.path.join(self.install_dir, 'share/rtshell',
                     'shell_support.in'), dest)
             with open(dest, 'a') as f:
-                if self.root:
-                    rtshell_path = os.path.join('/',os.path.relpath(self.install_dir,self.root))
-                else:
-                    rtshell_path = self.install_dir
-                f.writelines((cmd.format(dir=os.path.join(rtshell_path,
+                f.writelines((cmd.format(dir=os.path.join(self.install_dir,
                     'share/rtshell')), '\n'))
             self.config_bash_compl()
 
