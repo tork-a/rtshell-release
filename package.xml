@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package>
   <name>rtshell</name>
-  <version>3.0.1</version>
+  <version>3.0.3</version>
   <description>
    <p>Shell commands for managing RT-Middleware running on OpenRTM-aist.</p>
   </description>
