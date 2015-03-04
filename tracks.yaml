@@ -11,16 +11,16 @@ tracks:
     - git-bloom-generate -y rosrpm --prefix release/:{ros_distro} :{ros_distro} -i
       :{release_inc}
     devel_branch: null
-    last_version: 3.0.1
+    last_version: 3.0.3
     name: upstream
-    patches: indigo
+    patches: hydro
     release_inc: '3'
     release_repo_url: null
     release_tag: v3.0.1
     ros_distro: hydro
     vcs_type: git
     vcs_uri: https://github.com/gbiggs/rtshell.git
-    version: 3.0.1
+    version: 3.0.3
   indigo:
     actions:
     - bloom-export-upstream :{vcs_local_uri} :{vcs_type} --tag :{release_tag} --display-uri
