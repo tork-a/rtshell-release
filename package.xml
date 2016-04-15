@@ -4,6 +4,8 @@
   <version>3.0.1</version>
   <description>
    <p>Shell commands for managing RT-Middleware running on OpenRTM-aist.</p>
+
+   <p><a href = "https://github.com/gbiggs/rtshell/blob/master/doc/cheatsheet/cheatsheet.pdf">cheat sheet</a></p>
   </description>
 
   <maintainer email="k-okada@jsk.t.u-tokyo.ac.jp">Kei Okada</maintainer>
@@ -11,7 +13,8 @@
   <author email="git@killbots.net">Geoffrey Biggs</author>
 
   <license>EPL</license>
-  <url type="website">http://ros.org/wiki/openrtm_tools</url>
+  <url type="website">http://ros.org/wiki/rtshell</url>
+  <url type="website">http://www.openrtm.org/pub/OpenRTM-aist/tools/rtshell/3.0/en/rtshell.html</url>
 
   <buildtool_depend>catkin</buildtool_depend>
 
