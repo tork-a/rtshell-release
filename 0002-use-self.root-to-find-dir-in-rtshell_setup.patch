@@ -1,4 +1,4 @@
-From a850fa1c9fc97750211385a9b69119d0ba8adfb2 Mon Sep 17 00:00:00 2001
+From 30b3c55e3a4f3c7095b24f980df02f0115186720 Mon Sep 17 00:00:00 2001
 From: Kei Okada <kei.okada@gmail.com>
 Date: Wed, 11 Feb 2015 01:12:18 +0900
 Subject: [PATCH 2/2] use self.root to find dir in rtshell_setup
