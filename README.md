@@ -1,3 +1,26 @@
+## rtshell (kinetic) - 3.0.1-0
+
+The packages in the `rtshell` repository were released into the `kinetic` distro by running `/usr/bin/bloom-release rtshell --rosdistro kinetic --track kinetic` on `Mon, 13 Jun 2016 15:48:08 -0000`
+
+The `rtshell` package was released.
+
+Version of package(s) in repository `rtshell`:
+
+- upstream repository: https://github.com/gbiggs/rtshell.git
+- release repository: unknown
+- rosdistro version: `null`
+- old version: `null`
+- new version: `3.0.1-0`
+
+Versions of tools used:
+
+- bloom version: `0.5.21`
+- catkin_pkg version: `0.2.10`
+- rosdep version: `0.11.5`
+- rosdistro version: `0.4.7`
+- vcstools version: `0.1.38`
+
+
 ## rtshell (jade) - 3.0.1-2
 
 The packages in the `rtshell` repository were released into the `jade` distro by running `/usr/bin/bloom-release rtshell -t jade -r jade` on `Fri, 24 Apr 2015 00:38:13 -0000`
