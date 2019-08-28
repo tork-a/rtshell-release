@@ -1,3 +1,26 @@
+## rtshell (melodic) - 3.0.1-1
+
+The packages in the `rtshell` repository were released into the `melodic` distro by running `/usr/bin/bloom-release rtshell --rosdistro melodic --track melodic` on `Wed, 28 Aug 2019 13:28:21 -0000`
+
+The `rtshell` package was released.
+
+Version of package(s) in repository `rtshell`:
+
+- upstream repository: https://github.com/gbiggs/rtshell.git
+- release repository: unknown
+- rosdistro version: `null`
+- old version: `null`
+- new version: `3.0.1-1`
+
+Versions of tools used:
+
+- bloom version: `0.8.0`
+- catkin_pkg version: `0.4.12`
+- rosdep version: `0.15.2`
+- rosdistro version: `0.7.4`
+- vcstools version: `0.1.42`
+
+
 ## rtshell (kinetic) - 3.0.1-1
 
 The packages in the `rtshell` repository were released into the `kinetic` distro by running `/usr/bin/bloom-release rtshell --rosdistro kinetic --track kinetic` on `Mon, 13 Jun 2016 15:52:00 -0000`
