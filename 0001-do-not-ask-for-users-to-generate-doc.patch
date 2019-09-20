@@ -1,4 +1,4 @@
-From 3275d101dd411c74598f1b831aa1688b9aef9646 Mon Sep 17 00:00:00 2001
+From ec2bde4a8e7c86630f3cebeb298f71f063cbeaef Mon Sep 17 00:00:00 2001
 From: Kei Okada <kei.okada@gmail.com>
 Date: Fri, 19 Dec 2014 17:37:33 +0900
 Subject: [PATCH 1/2] do not ask for users to generate doc
@@ -22,5 +22,5 @@ index 3228d2d..0e447e4 100644
          print 'Generating documentation'
          p = subprocess.Popen(['./make_docs', 'man', 'html', 'pdf', '-v'],
 -- 
-1.9.1
+2.17.1
 
