@@ -1,0 +1,29 @@
+From 30b3c55e3a4f3c7095b24f980df02f0115186720 Mon Sep 17 00:00:00 2001
+From: Kei Okada <kei.okada@gmail.com>
+Date: Wed, 11 Feb 2015 01:12:18 +0900
+Subject: [PATCH 2/2] use self.root to find dir in rtshell_setup
+
+---
+ setup.py | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/setup.py b/setup.py
+index 0e447e4..2f115b2 100644
+--- a/setup.py
++++ b/setup.py
+@@ -180,7 +180,11 @@ class InstallConfigure(install_data):
+             self.move_file(os.path.join(self.install_dir, 'share/rtshell',
+                     'shell_support.in'), dest)
+             with open(dest, 'a') as f:
+-                f.writelines((cmd.format(dir=os.path.join(self.install_dir,
++                if self.root:
++                    rtshell_path = os.path.join('/',os.path.relpath(self.install_dir,self.root))
++                else:
++                    rtshell_path = self.install_dir
++                f.writelines((cmd.format(dir=os.path.join(rtshell_path,
+                     'share/rtshell')), '\n'))
+             self.config_bash_compl()
+ 
+-- 
+1.9.1
+
