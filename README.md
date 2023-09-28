@@ -1,3 +1,26 @@
+## rtshell (noetic) - 3.0.1-1
+
+The packages in the `rtshell` repository were released into the `noetic` distro by running `/home/k-okada/.local/bin/bloom-release rtshell --track noetic --ros-distro noetic` on `Thu, 28 Sep 2023 06:47:05 -0000`
+
+The `rtshell` package was released.
+
+Version of package(s) in repository `rtshell`:
+
+- upstream repository: https://github.com/gbiggs/rtshell.git
+- release repository: unknown
+- rosdistro version: `null`
+- old version: `null`
+- new version: `3.0.1-1`
+
+Versions of tools used:
+
+- bloom version: `0.11.2`
+- catkin_pkg version: `0.5.2`
+- rosdep version: `0.22.2`
+- rosdistro version: `0.9.0`
+- vcstools version: `0.1.42`
+
+
 ## rtshell (melodic) - 3.0.1-1
 
 The packages in the `rtshell` repository were released into the `melodic` distro by running `/usr/bin/bloom-release rtshell --rosdistro melodic --track melodic` on `Wed, 28 Aug 2019 13:28:21 -0000`
