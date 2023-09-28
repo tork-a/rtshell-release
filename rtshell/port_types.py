@@ -22,9 +22,9 @@ Classes and functions for managing port types.
 import re
 import rtctree.path
 
-from . import comp_mgmt
-from . import fmt
-from . import rts_exceptions
+import comp_mgmt
+import fmt
+import rts_exceptions
 
 
 ###############################################################################
@@ -159,7 +159,7 @@ def make_port_specs(ports, modmgr, tree):
             result[name] = (PortSpec(name, port_cons, (rtc, port), input=input,
                 formatter=formatter,
                 type_name=port_obj.properties['dataport.data_type'], raw=raw))
-    return list(result.values())
+    return result.values()
 
 
 def parse_targets(targets):

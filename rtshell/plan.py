@@ -22,13 +22,13 @@ import os
 import rtctree.path
 import rtsprofile.message_sending
 import sys
-import _thread
+import thread
 import threading
 import time
 import traceback
 import types
 
-from . import rts_exceptions
+import rts_exceptions
 
 
 class Counter:
@@ -214,8 +214,8 @@ class ActionExecutor(threading.Thread):
             c(*self._args, **self._kwargs)
 
     def _execute_action(self):
-        print('Executing {0} {1}'.format(self.id_string,
-                self._action), file=sys.stderr)
+        print >>sys.stderr, 'Executing {0} {1}'.format(self.id_string,
+                self._action)
         self._action(*self._args, **self._kwargs)
         self._do_callbacks()
 
@@ -379,7 +379,7 @@ class DelayedCondition(BasicCondition, threading.Thread):
         while True:
             try:
                 satisfied = self._check()
-            except Exception as e:
+            except Exception, e:
                 self._set_error(traceback.format_exc())
                 break
             with self._cancel_lock:
@@ -391,7 +391,7 @@ class DelayedCondition(BasicCondition, threading.Thread):
                 # Signal the owner
                 self._executor.set()
                 break
-            if type(self._timeout) is not type(None):
+            if type(self._timeout) is not types.NoneType:
                 # Check if the remaining time is greater than zero
                 if self._check_timeout() <= 0.0:
                     self._set_error(
@@ -594,9 +594,9 @@ class Plan(object):
                             action.add_condition(mc)
                             target_p = (p.id, p.component_id, p.instance_name)
                             if all[target_p].action.optional:
-                                print('Warning: action depends \
+                                print >>sys.stderr, 'Warning: action depends \
 on an optional action: "{0}". This may cause a deadlock if the previous \
-action\'s component is not present.'.format(desc), file=sys.stderr)
+action\'s component is not present.'.format(desc)
                     else:
                         # Wait for action to occur
                         for p in c.preceding_components:
@@ -611,11 +611,11 @@ action\'s component is not present.'.format(desc), file=sys.stderr)
                             target_p = (p.id, p.component_id, p.instance_name)
                             all[target_p].add_callback(_make_action_cb(ec))
                             if all[target_p].action.optional:
-                                print('Warning: action depends \
+                                print >>sys.stderr, 'Warning: action depends \
 on an optional action: "{0}". This may cause a deadlock if the previous \
-action\'s component is not present.'.format(desc), file=sys.stderr)
+action\'s component is not present.'.format(desc)
 
-        for k, a in list(all.items()):
+        for k, a in all.items():
             if a.immediate:
                 self._immediates.append(a)
             else:

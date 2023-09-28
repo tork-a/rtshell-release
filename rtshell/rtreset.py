@@ -20,7 +20,7 @@ inactive state.
 '''
 
 
-from . import state_control_base
+import state_control_base
 
 
 def reset_action(object, ec_index):
