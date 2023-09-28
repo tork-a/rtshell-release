@@ -363,20 +363,20 @@ class rtcatTests(unittest.TestCase):
     def test_rtc(self):
         stdout, stderr, ret = call_process(['./rtcat',
             '/localhost/local.host_cxt/Std0.rtc'])
-        self.assert_(stdout.startswith('Std0.rtc'))
-        self.assert_('Inactive' in stdout)
-        self.assert_('Category' in stdout)
-        self.assert_('Execution Context' in stdout)
-        self.assert_('DataInPort: in' in stdout)
+        self.assertTrue(stdout.startswith('Std0.rtc'))
+        self.assertTrue('Inactive' in stdout)
+        self.assertTrue('Category' in stdout)
+        self.assertTrue('Execution Context' in stdout)
+        self.assertTrue('DataInPort: in' in stdout)
         self.assertEqual(stderr, '')
         self.assertEqual(ret, 0)
 
     def test_manager(self):
         stdout, stderr, ret = call_process(['./rtcat',
             '/localhost/local.host_cxt/manager.mgr'])
-        self.assert_(stdout.startswith('Name: manager'))
-        self.assert_('Modules:' in stdout)
-        self.assert_('Loaded modules:' in stdout)
+        self.assertTrue(stdout.startswith('Name: manager'))
+        self.assertTrue('Modules:' in stdout)
+        self.assertTrue('Loaded modules:' in stdout)
         self.assertEqual(stderr, '')
         self.assertEqual(ret, 0)
 
@@ -386,9 +386,9 @@ class rtcatTests(unittest.TestCase):
         self.assertEqual(stdout, '+DataInPort: in')
         stdout, stderr, ret = call_process(['./rtcat', '-l',
             '/localhost/local.host_cxt/Std0.rtc:in'])
-        self.assert_(stdout.startswith('-DataInPort: in'))
-        self.assert_('dataport.data_type' in stdout)
-        self.assert_('TimedLong' in stdout)
+        self.assertTrue(stdout.startswith('-DataInPort: in'))
+        self.assertTrue('dataport.data_type' in stdout)
+        self.assertTrue('TimedLong' in stdout)
         self.assertEqual(stderr, '')
         self.assertEqual(ret, 0)
 
@@ -630,7 +630,7 @@ class rtcompTests(unittest.TestCase):
         t = rtctree.tree.RTCTree(paths=p)
         c = t.get_node(p)
         self.assertNotEqual(c, None)
-        self.assert_(c.is_composite)
+        self.assertTrue(c.is_composite)
 
     def _assert_comp_has_member(self, comp, member):
         p = ['/', 'localhost', 'local.host_cxt', comp]
@@ -642,7 +642,7 @@ class rtcompTests(unittest.TestCase):
             if m.get_component_profile().instance_name == member:
                 has_member = True
                 break
-        self.assert_(has_member)
+        self.assertTrue(has_member)
 
     def _assert_comp_not_has_member(self, comp, member):
         p = ['/', 'localhost', 'local.host_cxt', comp]
@@ -654,7 +654,7 @@ class rtcompTests(unittest.TestCase):
             if m.get_component_profile().instance_name == member:
                 has_member = True
                 break
-        self.assert_(not has_member)
+        self.assertTrue(not has_member)
 
     def _assert_comp_exports_port(self, comp, port):
         p = ['/', 'localhost', 'local.host_cxt', comp]
@@ -662,7 +662,7 @@ class rtcompTests(unittest.TestCase):
         c = t.get_node(p)
         self.assertNotEqual(c, None)
         ports = c.conf_sets['default'].data['exported_ports'].split(',')
-        self.assert_(port in ports)
+        self.assertTrue(port in ports)
 
     def _assert_comp_not_exports_port(self, comp, port):
         p = ['/', 'localhost', 'local.host_cxt', comp]
@@ -670,7 +670,7 @@ class rtcompTests(unittest.TestCase):
         c = t.get_node(p)
         self.assertNotEqual(c, None)
         ports = c.conf_sets['default'].data['exported_ports'].split(',')
-        self.assert_(port not in ports)
+        self.assertTrue(port not in ports)
 
 
 def rtcomp_suite():
@@ -704,10 +704,10 @@ class rtconTests(unittest.TestCase):
         self.assertEqual(ret, 0)
         stdout, stderr, ret = call_process(['./rtcat', '-l',
             '/localhost/local.host_cxt/Std0.rtc:in'])
-        self.assert_('/localhost/local.host_cxt/Output0.rtc:out' in stdout)
+        self.assertTrue('/localhost/local.host_cxt/Output0.rtc:out' in stdout)
         stdout, stderr, ret = call_process(['./rtcat', '-l',
             '/localhost/local.host_cxt/Output0.rtc:out'])
-        self.assert_('/localhost/local.host_cxt/Std0.rtc:in' in stdout)
+        self.assertTrue('/localhost/local.host_cxt/Std0.rtc:in' in stdout)
 
     def test_set_props(self):
         stdout, stderr, ret = call_process(['./rtcon',
@@ -719,10 +719,10 @@ class rtconTests(unittest.TestCase):
         self.assertEqual(ret, 0)
         stdout, stderr, ret = call_process(['./rtcat', '-ll',
             '/localhost/local.host_cxt/Std0.rtc:in'])
-        self.assert_('dataport.subscription_type      new' in stdout)
+        self.assertTrue('dataport.subscription_type      new' in stdout)
         stdout, stderr, ret = call_process(['./rtcat', '-ll',
             '/localhost/local.host_cxt/Output0.rtc:out'])
-        self.assert_('dataport.subscription_type      new' in stdout)
+        self.assertTrue('dataport.subscription_type      new' in stdout)
 
     def test_bad_prop(self):
         stdout, stderr, ret = call_process(['./rtcon',
@@ -730,12 +730,12 @@ class rtconTests(unittest.TestCase):
             '/localhost/local.host_cxt/Output0.rtc:out',
             '-p', 'dataport.subscription_type'])
         self.assertEqual(stdout, '')
-        self.assert_(
+        self.assertTrue(
             'Bad property format: dataport.subscription_type' in stderr)
         self.assertEqual(ret, 2)
         stdout, stderr, ret = call_process(['./rtcat', '-l',
             '/localhost/local.host_cxt/Std0.rtc:in'])
-        self.assert_('Connected to: /localhost/local.host_cxt/Output0.rtc:out'\
+        self.assertTrue('Connected to: /localhost/local.host_cxt/Output0.rtc:out'\
                 not in stdout)
 
     def test_set_name(self):
@@ -748,10 +748,10 @@ class rtconTests(unittest.TestCase):
         self.assertEqual(ret, 0)
         stdout, stderr, ret = call_process(['./rtcat', '-ll',
             '/localhost/local.host_cxt/Std0.rtc:in'])
-        self.assert_('test_conn' in stdout)
+        self.assertTrue('test_conn' in stdout)
         stdout, stderr, ret = call_process(['./rtcat', '-ll',
             '/localhost/local.host_cxt/Output0.rtc:out'])
-        self.assert_('test_conn' in stdout)
+        self.assertTrue('test_conn' in stdout)
 
     def test_set_id(self):
         stdout, stderr, ret = call_process(['./rtcon',
@@ -763,10 +763,10 @@ class rtconTests(unittest.TestCase):
         self.assertEqual(ret, 0)
         stdout, stderr, ret = call_process(['./rtcat', '-ll',
             '/localhost/local.host_cxt/Std0.rtc:in'])
-        self.assert_('conn_id' in stdout)
+        self.assertTrue('conn_id' in stdout)
         stdout, stderr, ret = call_process(['./rtcat', '-ll',
             '/localhost/local.host_cxt/Output0.rtc:out'])
-        self.assert_('conn_id' in stdout)
+        self.assertTrue('conn_id' in stdout)
 
     def test_no_source_port(self):
         test_sourceportnotfound(self, './rtcon', obj1='Std0.rtc',
@@ -777,14 +777,14 @@ class rtconTests(unittest.TestCase):
     def test_not_enough_targets(self):
         stdout, stderr, ret = call_process(['./rtcon', 'Std0.rtc:in'])
         self.assertEqual(stdout, '')
-        self.assert_('Usage:' in stderr)
+        self.assertTrue('Usage:' in stderr)
         self.assertEqual(ret, 1)
 
     def test_too_many_targets(self):
         stdout, stderr, ret = call_process(['./rtcon', 'Std0.rtc:in',
             'Output0.rtc:out', 'Err0.rtc:in'])
         self.assertEqual(stdout, '')
-        self.assert_('Usage:' in stderr)
+        self.assertTrue('Usage:' in stderr)
         self.assertEqual(ret, 1)
 
     def test_no_dest_port(self):
@@ -871,9 +871,9 @@ class rtconfTests(unittest.TestCase):
     def test_list(self):
         stdout, stderr, ret = call_process(['./rtconf',
             '/localhost/local.host_cxt/Std0.rtc', 'list'])
-        self.assert_('+default*' in stdout)
-        self.assert_('+set1' in stdout)
-        self.assert_('+set2' in stdout)
+        self.assertTrue('+default*' in stdout)
+        self.assertTrue('+set1' in stdout)
+        self.assertTrue('+set2' in stdout)
         self.assertEqual(stderr, '')
         self.assertEqual(ret, 0)
 
@@ -1037,7 +1037,7 @@ class rtconfTests(unittest.TestCase):
         stdout, stderr, ret = call_process(['./rtconf', '-a',
             '/localhost/local.host_cxt/Std0.rtc', 'act', '-s', '__hidden__'])
         self.assertEqual(stdout, '')
-        self.assert_('SDOPackage.InternalError' in stderr)
+        self.assertTrue('SDOPackage.InternalError' in stderr)
         self.assertEqual(ret, 1)
 
     def test_context(self):
@@ -1083,52 +1083,52 @@ class rtcryoTests(unittest.TestCase):
         stop_ns(self._ns)
 
     def _check_rtsys_xml(self, rtsys):
-        self.assert_(rtsys.startswith('<?xml'))
+        self.assertTrue(rtsys.startswith('<?xml'))
         # Components
-        self.assert_('rts:instanceName="Std0"' in rtsys)
-        self.assert_('rts:instanceName="Output0"' in rtsys)
+        self.assertTrue('rts:instanceName="Std0"' in rtsys)
+        self.assertTrue('rts:instanceName="Output0"' in rtsys)
         # Configuration sets and parameters
-        self.assert_('rts:ConfigurationSets rts:id="default"' in rtsys)
-        self.assert_('rts:ConfigurationSets rts:id="__hidden__"' in rtsys)
-        self.assert_('rts:ConfigurationSets rts:id="set1"' in rtsys)
-        self.assert_('rts:ConfigurationSets rts:id="set2"' in rtsys)
-        self.assert_('rts:name="param"' in rtsys)
-        self.assert_('rts:data="0"' in rtsys)
-        self.assert_('rts:data="1"' in rtsys)
-        self.assert_('rts:data="42"' in rtsys)
-        self.assert_('rts:data="3"' in rtsys)
+        self.assertTrue('rts:ConfigurationSets rts:id="default"' in rtsys)
+        self.assertTrue('rts:ConfigurationSets rts:id="__hidden__"' in rtsys)
+        self.assertTrue('rts:ConfigurationSets rts:id="set1"' in rtsys)
+        self.assertTrue('rts:ConfigurationSets rts:id="set2"' in rtsys)
+        self.assertTrue('rts:name="param"' in rtsys)
+        self.assertTrue('rts:data="0"' in rtsys)
+        self.assertTrue('rts:data="1"' in rtsys)
+        self.assertTrue('rts:data="42"' in rtsys)
+        self.assertTrue('rts:data="3"' in rtsys)
         # Connections
-        self.assert_('rts:DataPortConnectors' in rtsys)
-        self.assert_('rts:name="in_out"' in rtsys)
-        self.assert_('rts:sourceDataPort' in rtsys)
-        self.assert_('rts:portName="Output0.out"' in rtsys)
-        self.assert_('rts:targetDataPort' in rtsys)
-        self.assert_('rts:portName="Std0.in"' in rtsys)
+        self.assertTrue('rts:DataPortConnectors' in rtsys)
+        self.assertTrue('rts:name="in_out"' in rtsys)
+        self.assertTrue('rts:sourceDataPort' in rtsys)
+        self.assertTrue('rts:portName="Output0.out"' in rtsys)
+        self.assertTrue('rts:targetDataPort' in rtsys)
+        self.assertTrue('rts:portName="Std0.in"' in rtsys)
         # Can it be loaded?
         rtsprofile.rts_profile.RtsProfile(xml_spec=rtsys)
 
     def _check_rtsys_yaml(self, rtsys):
-        self.assert_(rtsys.startswith('rtsProfile:'))
+        self.assertTrue(rtsys.startswith('rtsProfile:'))
         # Components
-        self.assert_('instanceName: Std0' in rtsys)
-        self.assert_('instanceName: Output0' in rtsys)
+        self.assertTrue('instanceName: Std0' in rtsys)
+        self.assertTrue('instanceName: Output0' in rtsys)
         # Configuration sets and parameters
-        self.assert_('id: default' in rtsys)
-        self.assert_('id: __hidden__' in rtsys)
-        self.assert_('id: set1' in rtsys)
-        self.assert_('id: set2' in rtsys)
-        self.assert_('name: param' in rtsys)
-        self.assert_("data: '0'" in rtsys)
-        self.assert_("data: '1'" in rtsys)
-        self.assert_("data: '42'" in rtsys)
-        self.assert_("data: '3'" in rtsys)
+        self.assertTrue('id: default' in rtsys)
+        self.assertTrue('id: __hidden__' in rtsys)
+        self.assertTrue('id: set1' in rtsys)
+        self.assertTrue('id: set2' in rtsys)
+        self.assertTrue('name: param' in rtsys)
+        self.assertTrue("data: '0'" in rtsys)
+        self.assertTrue("data: '1'" in rtsys)
+        self.assertTrue("data: '42'" in rtsys)
+        self.assertTrue("data: '3'" in rtsys)
         # Connections
-        self.assert_('dataPortConnectors' in rtsys)
-        self.assert_('name: in_out' in rtsys)
-        self.assert_('sourceDataPort' in rtsys)
-        self.assert_('portName: Output0.out' in rtsys)
-        self.assert_('targetDataPort' in rtsys)
-        self.assert_('portName: Std0.in' in rtsys)
+        self.assertTrue('dataPortConnectors' in rtsys)
+        self.assertTrue('name: in_out' in rtsys)
+        self.assertTrue('sourceDataPort' in rtsys)
+        self.assertTrue('portName: Output0.out' in rtsys)
+        self.assertTrue('targetDataPort' in rtsys)
+        self.assertTrue('portName: Std0.in' in rtsys)
         # Can it be loaded?
         rtsprofile.rts_profile.RtsProfile(yaml_spec=rtsys)
 
@@ -1173,7 +1173,7 @@ class rtcryoTests(unittest.TestCase):
         self.assertEqual(ret, 0)
         orig = load_file('./test/sys.rtsys')
         self.assertNotEqual(stdout, orig)
-        self.assert_('rts:abstract="This is an abstract"' in stdout)
+        self.assertTrue('rts:abstract="This is an abstract"' in stdout)
 
     def test_freeze_sysname(self):
         stdout, stderr, ret = call_process(['./rtcryo', '-n',
@@ -1182,7 +1182,7 @@ class rtcryoTests(unittest.TestCase):
         self.assertEqual(ret, 0)
         orig = load_file('./test/sys.rtsys')
         self.assertNotEqual(stdout, orig)
-        self.assert_('rts:id="RTSystem :Me.system name.0"' in stdout)
+        self.assertTrue('rts:id="RTSystem :Me.system name.0"' in stdout)
 
     def test_freeze_version(self):
         stdout, stderr, ret = call_process(['./rtcryo', '-v',
@@ -1191,7 +1191,7 @@ class rtcryoTests(unittest.TestCase):
         self.assertEqual(ret, 0)
         orig = load_file('./test/sys.rtsys')
         self.assertNotEqual(stdout, orig)
-        self.assert_('rts:id="RTSystem :Me.RTSystem.42"' in stdout)
+        self.assertTrue('rts:id="RTSystem :Me.RTSystem.42"' in stdout)
 
     def test_freeze_vendor(self):
         stdout, stderr, ret = call_process(['./rtcryo', '-e',
@@ -1200,7 +1200,7 @@ class rtcryoTests(unittest.TestCase):
         self.assertEqual(ret, 0)
         orig = load_file('./test/sys.rtsys')
         self.assertNotEqual(stdout, orig)
-        self.assert_('rts:id="RTSystem :UnitTest.RTSystem.0"' in stdout)
+        self.assertTrue('rts:id="RTSystem :UnitTest.RTSystem.0"' in stdout)
 
 
 def rtcryo_suite():
@@ -1558,14 +1558,14 @@ class rtdisTests(unittest.TestCase):
         self.assertEqual(ret, 0)
         stdout, stderr, ret = call_process(['./rtcat', '-l',
             '/localhost/local.host_cxt/Output0.rtc:out'])
-        self.assert_('/localhost/local.host_cxt/Std0.rtc:in' not in stdout)
-        self.assert_('/localhost/local.host_cxt/Err0.rtc:in' not in stdout)
+        self.assertTrue('/localhost/local.host_cxt/Std0.rtc:in' not in stdout)
+        self.assertTrue('/localhost/local.host_cxt/Err0.rtc:in' not in stdout)
         stdout, stderr, ret = call_process(['./rtcat', '-l',
             '/localhost/local.host_cxt/Std0.rtc:in'])
-        self.assert_('/localhost/local.host_cxt/Output0.rtc:out' not in stdout)
+        self.assertTrue('/localhost/local.host_cxt/Output0.rtc:out' not in stdout)
         stdout, stderr, ret = call_process(['./rtcat', '-l',
             '/localhost/local.host_cxt/Err0.rtc:in'])
-        self.assert_('/localhost/local.host_cxt/Output0.rtc:out' not in stdout)
+        self.assertTrue('/localhost/local.host_cxt/Output0.rtc:out' not in stdout)
 
     def test_disconnect_one_from_many(self):
         stdout, stderr, ret = call_process(['./rtdis',
@@ -1576,14 +1576,14 @@ class rtdisTests(unittest.TestCase):
         self.assertEqual(ret, 0)
         stdout, stderr, ret = call_process(['./rtcat', '-l',
             '/localhost/local.host_cxt/Output0.rtc:out'])
-        self.assert_('/localhost/local.host_cxt/Std0.rtc:in' not in stdout)
-        self.assert_('/localhost/local.host_cxt/Err0.rtc:in' in stdout)
+        self.assertTrue('/localhost/local.host_cxt/Std0.rtc:in' not in stdout)
+        self.assertTrue('/localhost/local.host_cxt/Err0.rtc:in' in stdout)
         stdout, stderr, ret = call_process(['./rtcat', '-l',
             '/localhost/local.host_cxt/Std0.rtc:in'])
-        self.assert_('/localhost/local.host_cxt/Output0.rtc:out' not in stdout)
+        self.assertTrue('/localhost/local.host_cxt/Output0.rtc:out' not in stdout)
         stdout, stderr, ret = call_process(['./rtcat', '-l',
             '/localhost/local.host_cxt/Err0.rtc:in'])
-        self.assert_('/localhost/local.host_cxt/Output0.rtc:out' in stdout)
+        self.assertTrue('/localhost/local.host_cxt/Output0.rtc:out' in stdout)
 
     def test_disconnect_one_from_one(self):
         # Get rid of one connection to prepare for the test
@@ -1600,10 +1600,10 @@ class rtdisTests(unittest.TestCase):
         self.assertEqual(ret, 0)
         stdout, stderr, ret = call_process(['./rtcat', '-l',
             '/localhost/local.host_cxt/Output0.rtc:out'])
-        self.assert_('/localhost/local.host_cxt/Err0.rtc:in' not in stdout)
+        self.assertTrue('/localhost/local.host_cxt/Err0.rtc:in' not in stdout)
         stdout, stderr, ret = call_process(['./rtcat', '-l',
             '/localhost/local.host_cxt/Err0.rtc:in'])
-        self.assert_('/localhost/local.host_cxt/Output0.rtc:out' not in stdout)
+        self.assertTrue('/localhost/local.host_cxt/Output0.rtc:out' not in stdout)
 
     def test_disconnect_one_by_id(self):
         stdout, stderr, ret = call_process(['./rtdis', '-i', 'con1',
@@ -1614,14 +1614,14 @@ class rtdisTests(unittest.TestCase):
         self.assertEqual(ret, 0)
         stdout, stderr, ret = call_process(['./rtcat', '-l',
             '/localhost/local.host_cxt/Output0.rtc:out'])
-        self.assert_('/localhost/local.host_cxt/Std0.rtc:in' not in stdout)
-        self.assert_('/localhost/local.host_cxt/Err0.rtc:in' in stdout)
+        self.assertTrue('/localhost/local.host_cxt/Std0.rtc:in' not in stdout)
+        self.assertTrue('/localhost/local.host_cxt/Err0.rtc:in' in stdout)
         stdout, stderr, ret = call_process(['./rtcat', '-l',
             '/localhost/local.host_cxt/Std0.rtc:in'])
-        self.assert_('/localhost/local.host_cxt/Output0.rtc:out' not in stdout)
+        self.assertTrue('/localhost/local.host_cxt/Output0.rtc:out' not in stdout)
         stdout, stderr, ret = call_process(['./rtcat', '-l',
             '/localhost/local.host_cxt/Err0.rtc:in'])
-        self.assert_('/localhost/local.host_cxt/Output0.rtc:out' in stdout)
+        self.assertTrue('/localhost/local.host_cxt/Output0.rtc:out' in stdout)
 
     def test_disconnect_all_by_id(self):
         stdout, stderr, ret = call_process(['./rtdis', '-i', 'con1', '-v', 
@@ -1631,14 +1631,14 @@ class rtdisTests(unittest.TestCase):
         self.assertEqual(ret, 0)
         stdout, stderr, ret = call_process(['./rtcat', '-l',
             '/localhost/local.host_cxt/Output0.rtc:out'])
-        self.assert_('/localhost/local.host_cxt/Std0.rtc:in' not in stdout)
-        self.assert_('/localhost/local.host_cxt/Err0.rtc:in' in stdout)
+        self.assertTrue('/localhost/local.host_cxt/Std0.rtc:in' not in stdout)
+        self.assertTrue('/localhost/local.host_cxt/Err0.rtc:in' in stdout)
         stdout, stderr, ret = call_process(['./rtcat', '-l',
             '/localhost/local.host_cxt/Std0.rtc:in'])
-        self.assert_('/localhost/local.host_cxt/Output0.rtc:out' not in stdout)
+        self.assertTrue('/localhost/local.host_cxt/Output0.rtc:out' not in stdout)
         stdout, stderr, ret = call_process(['./rtcat', '-l',
             '/localhost/local.host_cxt/Err0.rtc:in'])
-        self.assert_('/localhost/local.host_cxt/Output0.rtc:out' in stdout)
+        self.assertTrue('/localhost/local.host_cxt/Output0.rtc:out' in stdout)
 
     def test_disconnect_not_connected(self):
         # Get rid of one connection to prepare for the test
@@ -1657,7 +1657,7 @@ class rtdisTests(unittest.TestCase):
         self.assertEqual(ret, 1)
         stdout, stderr, ret = call_process(['./rtcat', '-l',
             '/localhost/local.host_cxt/Output0.rtc:out'])
-        self.assert_('/localhost/local.host_cxt/Err0.rtc:in' in stdout)
+        self.assertTrue('/localhost/local.host_cxt/Err0.rtc:in' in stdout)
 
     def test_disconnect_bad_id(self):
         stdout, stderr, ret = call_process(['./rtdis', '-i', 'no_id',
@@ -1669,8 +1669,8 @@ class rtdisTests(unittest.TestCase):
         self.assertEqual(ret, 1)
         stdout, stderr, ret = call_process(['./rtcat', '-l',
             '/localhost/local.host_cxt/Output0.rtc:out'])
-        self.assert_('/localhost/local.host_cxt/Std0.rtc:in' in stdout)
-        self.assert_('/localhost/local.host_cxt/Err0.rtc:in' in stdout)
+        self.assertTrue('/localhost/local.host_cxt/Std0.rtc:in' in stdout)
+        self.assertTrue('/localhost/local.host_cxt/Err0.rtc:in' in stdout)
 
     def test_no_source_port(self):
         test_sourceportnotfound(self, 'rtdis', obj1='Std0.rtc',
@@ -1682,7 +1682,7 @@ class rtdisTests(unittest.TestCase):
         stdout, stderr, ret = call_process(['./rtdis', 'Std0.rtc:in',
             'Output0.rtc:out', 'Err0.rtc:in'])
         self.assertEqual(stdout, '')
-        self.assert_('Usage:' in stderr)
+        self.assertTrue('Usage:' in stderr)
         self.assertEqual(ret, 1)
 
     def test_no_dest_port(self):
@@ -1757,22 +1757,22 @@ class rtdocTests(unittest.TestCase):
         stop_ns(self._ns)
 
     def _check_stdout(self, stdout, title):
-        self.assert_(title in stdout)
-        self.assert_('Documentation component' in stdout)
-        self.assert_('Geoffrey Biggs' in stdout)
-        self.assert_('test' in stdout)
-        self.assert_('EPL' in stdout)
-        self.assert_('example.com' in stdout)
-        self.assert_('http://www.openrtm.org' in stdout)
-        self.assert_('This is the introduction.' in stdout)
-        self.assert_('This component requires nothing.' in stdout)
-        self.assert_('You cannot install this component.' in stdout)
-        self.assert_('You cannot use it, either.' in stdout)
-        self.assert_('Miscellaneous is hard to spell.' in stdout)
-        self.assert_('No changes.' in stdout)
-        self.assert_('param' in stdout)
-        self.assert_('This port receives stuff.' in stdout)
-        self.assert_('Another section.' in stdout)
+        self.assertTrue(title in stdout)
+        self.assertTrue('Documentation component' in stdout)
+        self.assertTrue('Geoffrey Biggs' in stdout)
+        self.assertTrue('test' in stdout)
+        self.assertTrue('EPL' in stdout)
+        self.assertTrue('example.com' in stdout)
+        self.assertTrue('http://www.openrtm.org' in stdout)
+        self.assertTrue('This is the introduction.' in stdout)
+        self.assertTrue('This component requires nothing.' in stdout)
+        self.assertTrue('You cannot install this component.' in stdout)
+        self.assertTrue('You cannot use it, either.' in stdout)
+        self.assertTrue('Miscellaneous is hard to spell.' in stdout)
+        self.assertTrue('No changes.' in stdout)
+        self.assertTrue('param' in stdout)
+        self.assertTrue('This port receives stuff.' in stdout)
+        self.assertTrue('Another section.' in stdout)
 
     def test_doc(self):
         stdout, stderr, ret = call_process(['./rtdoc',
@@ -1805,20 +1805,20 @@ class rtdocTests(unittest.TestCase):
     def test_no_doc(self):
         stdout, stderr, ret = call_process(['./rtdoc',
             '/localhost/local.host_cxt/Std0.rtc', '-f', 'rst'])
-        self.assert_(stdout.startswith('Std0.rtc\n'))
-        self.assert_('Introduction' not in stdout)
-        self.assert_('Requirements' not in stdout)
-        self.assert_('Installation' not in stdout)
-        self.assert_('Usage' not in stdout)
+        self.assertTrue(stdout.startswith('Std0.rtc\n'))
+        self.assertTrue('Introduction' not in stdout)
+        self.assertTrue('Requirements' not in stdout)
+        self.assertTrue('Installation' not in stdout)
+        self.assertTrue('Usage' not in stdout)
         self.assertEqual(stderr, ''),
         self.assertEqual(ret, 0)
 
     def test_no_ports_config(self):
         stdout, stderr, ret = call_process(['./rtdoc',
             '/localhost/local.host_cxt/Doc20.rtc', '-f', 'rst'])
-        self.assert_(stdout.startswith('Doc20.rtc\n'))
-        self.assert_('Ports' not in stdout)
-        self.assert_('Configuration parameters' not in stdout)
+        self.assertTrue(stdout.startswith('Doc20.rtc\n'))
+        self.assertTrue('Ports' not in stdout)
+        self.assertTrue('Configuration parameters' not in stdout)
         self.assertEqual(stderr, ''),
         self.assertEqual(ret, 0)
 
@@ -1847,12 +1847,12 @@ class rtdocTests(unittest.TestCase):
         stdout, stderr, ret = call_process(['./rtdoc',
             '/localhost/local.host_cxt/Doc0.rtc', '-f', 'rst'])
         stdout = stdout.partition('Usage'),
-        self.assert_('Installation' in stdout[0][0])
-        self.assert_('Installation' not in stdout[0][2])
-        self.assert_('Changelog' not in stdout[0][0])
-        self.assert_('Changelog' in stdout[0][2])
-        self.assert_('Another' not in stdout[0][0])
-        self.assert_('Another' in stdout[0][2])
+        self.assertTrue('Installation' in stdout[0][0])
+        self.assertTrue('Installation' not in stdout[0][2])
+        self.assertTrue('Changelog' not in stdout[0][0])
+        self.assertTrue('Changelog' in stdout[0][2])
+        self.assertTrue('Another' not in stdout[0][0])
+        self.assertTrue('Another' in stdout[0][2])
         self.assertEqual(stderr, ''),
         self.assertEqual(ret, 0)
         stdout, stderr, ret = call_process(['./rtconf', '-a', '-s', '__doc__',
@@ -1862,12 +1862,12 @@ class rtdocTests(unittest.TestCase):
         stdout, stderr, ret = call_process(['./rtdoc',
             '/localhost/local.host_cxt/Doc0.rtc', '-f', 'rst'])
         stdout = stdout.partition('Usage'),
-        self.assert_('Installation' not in stdout[0][0])
-        self.assert_('Installation' in stdout[0][2])
-        self.assert_('Changelog' in stdout[0][0])
-        self.assert_('Changelog' not in stdout[0][2])
-        self.assert_('Another' not in stdout[0][0])
-        self.assert_('Another' in stdout[0][2])
+        self.assertTrue('Installation' not in stdout[0][0])
+        self.assertTrue('Installation' in stdout[0][2])
+        self.assertTrue('Changelog' in stdout[0][0])
+        self.assertTrue('Changelog' not in stdout[0][2])
+        self.assertTrue('Another' not in stdout[0][0])
+        self.assertTrue('Another' in stdout[0][2])
         self.assertEqual(stderr, ''),
         self.assertEqual(ret, 0)
 
@@ -1961,16 +1961,16 @@ class rtfindTests(unittest.TestCase):
 
     def test_find_by_type_c(self):
         stdout, stderr, ret = call_process(['./rtfind', '.', '-t', 'c'])
-        self.assert_('/localhost/local.host_cxt/Std0.rtc' in stdout)
-        self.assert_('/localhost/local.host_cxt/Output0.rtc' in stdout)
+        self.assertTrue('/localhost/local.host_cxt/Std0.rtc' in stdout)
+        self.assertTrue('/localhost/local.host_cxt/Output0.rtc' in stdout)
         self.assertEqual(stderr, '')
         self.assertEqual(ret, 0)
 
     def test_find_by_type_d(self):
         stdout, stderr, ret = call_process(['./rtfind', '.', '-t', 'd'])
-        self.assert_('/localhost' in stdout)
-        self.assert_('/localhost/local.host_cxt' in stdout)
-        self.assert_('/localhost/local.host_cxt/manager.mgr' in stdout)
+        self.assertTrue('/localhost' in stdout)
+        self.assertTrue('/localhost/local.host_cxt' in stdout)
+        self.assertTrue('/localhost/local.host_cxt/manager.mgr' in stdout)
         self.assertEqual(stderr, '')
         self.assertEqual(ret, 0)
 
@@ -1994,9 +1994,9 @@ class rtfindTests(unittest.TestCase):
 
     def test_find_by_type_multiple(self):
         stdout, stderr, ret = call_process(['./rtfind', '.', '-t', 'cm'])
-        self.assert_('/localhost/local.host_cxt/Std0.rtc' in stdout)
-        self.assert_('/localhost/local.host_cxt/Output0.rtc' in stdout)
-        self.assert_('/localhost/local.host_cxt/manager.mgr' in stdout)
+        self.assertTrue('/localhost/local.host_cxt/Std0.rtc' in stdout)
+        self.assertTrue('/localhost/local.host_cxt/Output0.rtc' in stdout)
+        self.assertTrue('/localhost/local.host_cxt/manager.mgr' in stdout)
         self.assertEqual(stderr, '')
         self.assertEqual(ret, 0)
 
@@ -2285,7 +2285,7 @@ class rtlogTests(unittest.TestCase):
             '/localhost/local.host_cxt/Std0.rtc:in.nums',
             '-f', './test/output.rtlog', '-p', '-s', '1297156964'])
         self.assertEqual(stdout, '')
-        self.assert_(re.match(r'Playing from \d{4}-\d{2}-\d{2} '
+        self.assertTrue(re.match(r'Playing from \d{4}-\d{2}-\d{2} '
             '\d{2}:\d{2}:\d{2} \(\d+.\d+\)\.\nrtlog: End of log reached.',
             stderr) is not None)
         self.assertEqual(ret, 0)
@@ -2297,7 +2297,7 @@ class rtlogTests(unittest.TestCase):
             '/localhost/local.host_cxt/Std0.rtc:in.nums',
             '-f', './test/output.rtlog', '-p', '-e', '1297156966'])
         self.assertEqual(stdout, '')
-        self.assert_(re.match(r'Playing until \d{4}-\d{2}-\d{2} '
+        self.assertTrue(re.match(r'Playing until \d{4}-\d{2}-\d{2} '
             '\d{2}:\d{2}:\d{2} \(\d+.\d+\)\.',
             stderr) is not None)
         self.assertEqual(ret, 0)
@@ -2310,7 +2310,7 @@ class rtlogTests(unittest.TestCase):
             '-f', './test/output.rtlog', '-p', '-s', '1297156964', '-e',
             '1297156966'])
         self.assertEqual(stdout, '')
-        self.assert_(re.match(r'Playing from \d{4}-\d{2}-\d{2} '
+        self.assertTrue(re.match(r'Playing from \d{4}-\d{2}-\d{2} '
             '\d{2}:\d{2}:\d{2} \(\d+.\d+\) until \d{4}-\d{2}-\d{2} '
             '\d{2}:\d{2}:\d{2} \(\d+.\d+\)\.', stderr) is not None)
         self.assertEqual(ret, 0)
@@ -2340,15 +2340,15 @@ class rtlogTests(unittest.TestCase):
         time.sleep(1)
         logger.terminate()
         stdout, stderr = logger.communicate()
-        print stdout
-        print stderr
+        print(stdout)
+        print(stderr)
         self.assertEqual(stdout, '')
         self.assertEqual(stderr, '')
         self.assertEqual(logger.returncode, -15)
         stdout, stderr, ret = call_process(['./rtlog', '-d', '-f',
             './test/test.rtlog'])
-        self.assert_(self._num_recorded(stdout) > 0)
-        self.assert_(self._log_start(stdout) > now)
+        self.assertTrue(self._num_recorded(stdout) > 0)
+        self.assertTrue(self._log_start(stdout) > now)
 
     def _test_record_limit_index(self):
         logger = start_process(['./rtlog',
@@ -2362,7 +2362,7 @@ class rtlogTests(unittest.TestCase):
         self.assertEqual(logger.returncode, 0)
         stdout, stderr, ret = call_process(['./rtlog', '-d', '-f',
             './test/test.rtlog'])
-        self.assert_(self._num_recorded(stdout) == 5)
+        self.assertTrue(self._num_recorded(stdout) == 5)
 
     def _test_record_limit_time(self):
         limit = time.time() + 3
@@ -2375,12 +2375,12 @@ class rtlogTests(unittest.TestCase):
         self.assertEqual(stdout, '')
         m = re.match(r'Recording until \d{4}-\d{2}-\d{2} '
             '\d{2}:\d{2}:\d{2} \((\d+.\d+)\)\.', stderr)
-        self.assert_(m is not None)
-        self.assert_(abs(float(m.group(1)) - limit) < 0.01)
+        self.assertTrue(m is not None)
+        self.assertTrue(abs(float(m.group(1)) - limit) < 0.01)
         self.assertEqual(logger.returncode, 0)
         stdout, stderr, ret = call_process(['./rtlog', '-d', '-f',
             './test/test.rtlog'])
-        self.assert_(self._num_recorded(stdout) > 0)
+        self.assertTrue(self._num_recorded(stdout) > 0)
 
     def _test_record_timeout(self):
         call_process(['./rtact', '/localhost/local.host_cxt/Output0.rtc'])
@@ -2393,28 +2393,28 @@ class rtlogTests(unittest.TestCase):
         self.assertEqual(ret, 0)
         stdout, stderr, ret = call_process(['./rtlog', '-d', '-f',
             './test/test.rtlog'])
-        self.assert_(self._num_recorded(stdout) > 0)
+        self.assertTrue(self._num_recorded(stdout) > 0)
         log_length = self._log_end(stdout) - self._log_start(stdout)
-        self.assert_(log_length < 3.5)
-        self.assert_(log_length > 2.5)
+        self.assertTrue(log_length < 3.5)
+        self.assertTrue(log_length > 2.5)
 
     def _test_display_info(self):
         stdout, stderr, ret = call_process(['./rtlog', '-d', '-f',
             './test/output.rtlog'])
         self.assertEqual(stderr, '')
         self.assertEqual(ret, 0)
-        self.assert_('Size: 1.41KiB (1446B)' in stdout)
-        self.assert_('Start time: 2011-02-08 18:22:42 (1297156962.58)' in
+        self.assertTrue('Size: 1.41KiB (1446B)' in stdout)
+        self.assertTrue('Start time: 2011-02-08 18:22:42 (1297156962.58)' in
                 stdout)
-        self.assert_('First entry time: 2011-02-08 18:22:43 '
+        self.assertTrue('First entry time: 2011-02-08 18:22:43 '
                 '(1297156963.450684160)' in stdout)
-        self.assert_('End time: 2011-02-08 18:22:47 '
+        self.assertTrue('End time: 2011-02-08 18:22:47 '
                 '(1297156967.592355840)' in stdout)
-        self.assert_('Number of entries: 5' in stdout)
-        self.assert_('Channel 1' in stdout)
-        self.assert_('Name: nums' in stdout)
-        self.assert_('Data type: TimedLong (RTC.TimedLong)' in stdout)
-        self.assert_('/localhost/odyssey.host_cxt/ConsoleIn0.rtc:out.nums' in
+        self.assertTrue('Number of entries: 5' in stdout)
+        self.assertTrue('Channel 1' in stdout)
+        self.assertTrue('Name: nums' in stdout)
+        self.assertTrue('Data type: TimedLong (RTC.TimedLong)' in stdout)
+        self.assertTrue('/localhost/odyssey.host_cxt/ConsoleIn0.rtc:out.nums' in
                 stdout)
 
     def test_playback_usermod(self):
@@ -2444,7 +2444,7 @@ class rtlogTests(unittest.TestCase):
         self.assertEqual(ret, 0)
         stdout, stderr, ret = call_process(['./rtlog', '-d', '-f',
             './test/test.rtlog', '--path=./test', '-m', 'MyData'])
-        self.assert_(self._num_recorded(stdout) == 5)
+        self.assertTrue(self._num_recorded(stdout) == 5)
 
     def _test_record_text(self):
         call_process(['./rtact', '/localhost/local.host_cxt/Output0.rtc'])
@@ -2455,7 +2455,7 @@ class rtlogTests(unittest.TestCase):
         self.assertEqual(stdout, '')
         self.assertEqual(stderr, 'Recording 5 entries.')
         self.assertEqual(ret, 0)
-        self.assert_(re.match(r"\d+.\d+\s+\('input0', "
+        self.assertTrue(re.match(r"\d+.\d+\s+\('input0', "
             "RTC\.TimedLong\(tm=RTC\.Time\(sec=0L, nsec=0L\), data=\d+\)\)\n",
             load_file('./test/test.rtlog')) is not None)
 
@@ -2522,34 +2522,34 @@ class rtlsTests(unittest.TestCase):
     def test_ls_hc(self):
         stdout, stderr, ret = call_process(['./rtls',
             'localhost/local.host_cxt'])
-        self.assert_('Std0.rtc' in stdout)
-        self.assert_('Output0.rtc' in stdout)
-        self.assert_('*Zombie0.rtc' in stdout)
-        self.assert_('manager.mgr' in stdout)
+        self.assertTrue('Std0.rtc' in stdout)
+        self.assertTrue('Output0.rtc' in stdout)
+        self.assertTrue('*Zombie0.rtc' in stdout)
+        self.assertTrue('manager.mgr' in stdout)
         self.assertEqual(stderr, '')
         self.assertEqual(ret, 0)
         stdout, stderr, ret = call_process(['./rtls',
             '/localhost/local.host_cxt'])
-        self.assert_('Std0.rtc' in stdout)
-        self.assert_('Output0.rtc' in stdout)
-        self.assert_('*Zombie0.rtc' in stdout)
-        self.assert_('manager.mgr' in stdout)
+        self.assertTrue('Std0.rtc' in stdout)
+        self.assertTrue('Output0.rtc' in stdout)
+        self.assertTrue('*Zombie0.rtc' in stdout)
+        self.assertTrue('manager.mgr' in stdout)
         self.assertEqual(stderr, '')
         self.assertEqual(ret, 0)
 
     def test_ls_mgr_dir(self):
         stdout, stderr, ret = call_process(['./rtls',
             'localhost/local.host_cxt/manager.mgr'])
-        self.assert_('Motor0.rtc' in stdout)
-        self.assert_('Controller0.rtc' in stdout)
-        self.assert_('Sensor0.rtc' in stdout)
+        self.assertTrue('Motor0.rtc' in stdout)
+        self.assertTrue('Controller0.rtc' in stdout)
+        self.assertTrue('Sensor0.rtc' in stdout)
         self.assertEqual(stderr, '')
         self.assertEqual(ret, 0)
         stdout, stderr, ret = call_process(['./rtls',
             '/localhost/local.host_cxt/manager.mgr'])
-        self.assert_('Motor0.rtc' in stdout)
-        self.assert_('Controller0.rtc' in stdout)
-        self.assert_('Sensor0.rtc' in stdout)
+        self.assertTrue('Motor0.rtc' in stdout)
+        self.assertTrue('Controller0.rtc' in stdout)
+        self.assertTrue('Sensor0.rtc' in stdout)
         self.assertEqual(stderr, '')
         self.assertEqual(ret, 0)
 
@@ -2570,9 +2570,9 @@ class rtlsTests(unittest.TestCase):
     def test_ls_mgr_obj(self):
         stdout, stderr, ret = call_process(['./rtls',
             'localhost/local.host_cxt/manager.mgr'])
-        self.assert_('Controller0.rtc' in stdout)
-        self.assert_('Motor0.rtc' in stdout)
-        self.assert_('Sensor0.rtc' in stdout)
+        self.assertTrue('Controller0.rtc' in stdout)
+        self.assertTrue('Motor0.rtc' in stdout)
+        self.assertTrue('Sensor0.rtc' in stdout)
         self.assertEqual(stderr, '')
         self.assertEqual(ret, 0)
 
@@ -2586,9 +2586,9 @@ class rtlsTests(unittest.TestCase):
     def test_ls_hc_long(self):
         stdout, stderr, ret = call_process(['./rtls', '-l',
             'localhost/local.host_cxt'])
-        self.assert_('Inactive  1/0  1/0  0/0  0/0  Std0.rtc' in stdout)
-        self.assert_('Inactive  2/0  1/0  1/0  0/0  Motor0.rtc' in stdout)
-        self.assert_('-         -    -    -    -    manager.mgr' in stdout)
+        self.assertTrue('Inactive  1/0  1/0  0/0  0/0  Std0.rtc' in stdout)
+        self.assertTrue('Inactive  2/0  1/0  1/0  0/0  Motor0.rtc' in stdout)
+        self.assertTrue('-         -    -    -    -    manager.mgr' in stdout)
         self.assertEqual(stderr, '')
         self.assertEqual(ret, 0)
 
@@ -2608,25 +2608,25 @@ class rtlsTests(unittest.TestCase):
 
     def test_ls_recurse(self):
         stdout, stderr, ret = call_process(['./rtls', '-R'])
-        self.assert_('/localhost' in stdout)
-        self.assert_('/localhost/local.host_cxt' in stdout)
-        self.assert_('Std0.rtc' in stdout)
-        self.assert_('Motor0.rtc' in stdout)
-        self.assert_('/localhost/local.host_cxt/manager.mgr' in stdout)
-        self.assert_('manager.mgr' in stdout)
-        self.assert_('*Zombie0.rtc' in stdout)
+        self.assertTrue('/localhost' in stdout)
+        self.assertTrue('/localhost/local.host_cxt' in stdout)
+        self.assertTrue('Std0.rtc' in stdout)
+        self.assertTrue('Motor0.rtc' in stdout)
+        self.assertTrue('/localhost/local.host_cxt/manager.mgr' in stdout)
+        self.assertTrue('manager.mgr' in stdout)
+        self.assertTrue('*Zombie0.rtc' in stdout)
         self.assertEqual(stderr, '')
         self.assertEqual(ret, 0)
 
     def test_ls_recurse_long(self):
         stdout, stderr, ret = call_process(['./rtls', '-lR'])
-        self.assert_('/localhost' in stdout)
-        self.assert_('/localhost/local.host_cxt' in stdout)
-        self.assert_('Inactive  1/0  1/0  0/0  0/0  Std0.rtc' in stdout)
-        self.assert_('Inactive  2/0  1/0  1/0  0/0  Motor0.rtc' in stdout)
-        self.assert_('/localhost/local.host_cxt/manager.mgr' in stdout)
-        self.assert_('-         -    -    -    -    manager.mgr' in stdout)
-        self.assert_('-         -    -    -    -    *Zombie0.rtc' in stdout)
+        self.assertTrue('/localhost' in stdout)
+        self.assertTrue('/localhost/local.host_cxt' in stdout)
+        self.assertTrue('Inactive  1/0  1/0  0/0  0/0  Std0.rtc' in stdout)
+        self.assertTrue('Inactive  2/0  1/0  1/0  0/0  Motor0.rtc' in stdout)
+        self.assertTrue('/localhost/local.host_cxt/manager.mgr' in stdout)
+        self.assertTrue('-         -    -    -    -    manager.mgr' in stdout)
+        self.assertTrue('-         -    -    -    -    *Zombie0.rtc' in stdout)
         self.assertEqual(stderr, '')
         self.assertEqual(ret, 0)
 
@@ -2683,7 +2683,7 @@ class rtmgrTests(unittest.TestCase):
         self.assertEqual(ret, 0)
 
     def _grab_section(self, stdout, sec, next_sec=''):
-        self.assert_(sec in stdout)
+        self.assertTrue(sec in stdout)
         if not next_sec:
             next_sec = '$'
         return re.match(r'.*?\n{0}\n(.*?){1}'.format(sec, next_sec), stdout,
@@ -2699,20 +2699,20 @@ class rtmgrTests(unittest.TestCase):
         stdout, stderr, ret = call_process(['./rtcat',
             '/localhost/local.host_cxt/manager.mgr'])
         loaded = self._grab_section(stdout, 'Loaded modules:')
-        self.assert_(os.path.join(COMP_LIB_PATH, 'Motor.so') in loaded)
+        self.assertTrue(os.path.join(COMP_LIB_PATH, 'Motor.so') in loaded)
 
     def test_load_mod_no_init(self):
         stdout, stderr, ret = call_process(['./rtmgr',
             '/localhost/local.host_cxt/manager.mgr', '-l',
             os.path.join(COMP_LIB_PATH, 'Motor.so')])
         self.assertEqual(stdout, '')
-        self.assert_(stderr.endswith('rtmgr: error: No initialisation '
+        self.assertTrue(stderr.endswith('rtmgr: error: No initialisation '
             'function specified.'))
         self.assertEqual(ret, 2)
         stdout, stderr, ret = call_process(['./rtcat',
             '/localhost/local.host_cxt/manager.mgr'])
         loaded = self._grab_section(stdout, 'Loaded modules:')
-        self.assert_(os.path.join(COMP_LIB_PATH, 'Motor.so') not in loaded)
+        self.assertTrue(os.path.join(COMP_LIB_PATH, 'Motor.so') not in loaded)
 
     def test_create_rtc(self):
         stdout, stderr, ret = call_process(['./rtmgr',
@@ -2722,10 +2722,10 @@ class rtmgrTests(unittest.TestCase):
         self.assertEqual(ret, 0)
         stdout, stderr, ret = call_process(['./rtls',
             'localhost/local.host_cxt/manager.mgr'])
-        self.assert_('Controller0.rtc' in stdout)
+        self.assertTrue('Controller0.rtc' in stdout)
         stdout, stderr, ret = call_process(['./rtls',
             'localhost/local.host_cxt/'])
-        self.assert_('Controller0.rtc' in stdout)
+        self.assertTrue('Controller0.rtc' in stdout)
 
     def test_delete_rtc(self):
         stdout, stderr, ret = call_process(['./rtmgr',
@@ -2735,10 +2735,10 @@ class rtmgrTests(unittest.TestCase):
         self.assertEqual(ret, 0)
         stdout, stderr, ret = call_process(['./rtls',
             'localhost/local.host_cxt/manager.mgr'])
-        self.assert_('Sensor0.rtc' not in stdout)
+        self.assertTrue('Sensor0.rtc' not in stdout)
         stdout, stderr, ret = call_process(['./rtls',
             'localhost/local.host_cxt/'])
-        self.assert_('Sensor0.rtc' not in stdout)
+        self.assertTrue('Sensor0.rtc' not in stdout)
 
     def test_unload_mod(self):
         stdout, stderr, ret = call_process(['./rtmgr',
@@ -2750,7 +2750,7 @@ class rtmgrTests(unittest.TestCase):
         stdout, stderr, ret = call_process(['./rtcat',
             '/localhost/local.host_cxt/manager.mgr'])
         loaded = self._grab_section(stdout, 'Loaded modules:')
-        self.assert_(os.path.join(COMP_LIB_PATH, 'Controller.so') not in loaded)
+        self.assertTrue(os.path.join(COMP_LIB_PATH, 'Controller.so') not in loaded)
 
     def test_no_cmds(self):
         stdout, stderr, ret = call_process(['./rtmgr',
@@ -2778,14 +2778,14 @@ class rtmgrTests(unittest.TestCase):
         stdout, stderr, ret = call_process(['./rtcat',
             '/localhost/local.host_cxt/manager.mgr'])
         loaded = self._grab_section(stdout, 'Loaded modules:')
-        self.assert_(os.path.join(COMP_LIB_PATH, 'Motor.so') not in loaded)
-        self.assert_(os.path.join(COMP_LIB_PATH, 'Controller.so') in loaded)
+        self.assertTrue(os.path.join(COMP_LIB_PATH, 'Motor.so') not in loaded)
+        self.assertTrue(os.path.join(COMP_LIB_PATH, 'Controller.so') in loaded)
         stdout, stderr, ret = call_process(['./rtls',
             'localhost/local.host_cxt/manager.mgr'])
-        self.assert_('Controller0.rtc' in stdout)
+        self.assertTrue('Controller0.rtc' in stdout)
         stdout, stderr, ret = call_process(['./rtls',
             'localhost/local.host_cxt/'])
-        self.assert_('Controller0.rtc' in stdout)
+        self.assertTrue('Controller0.rtc' in stdout)
 
     def test_port(self):
         stdout, stderr, ret = call_process(['./rtmgr',
@@ -2847,7 +2847,7 @@ class rtmgrTests(unittest.TestCase):
         stdout, stderr, ret = call_process(['./rtcat',
             '/localhost/local.host_cxt/manager.mgr'])
         loaded = self._grab_section(stdout, 'Loaded modules:')
-        self.assert_(os.path.join(COMP_LIB_PATH, 'Motor.so') in loaded)
+        self.assertTrue(os.path.join(COMP_LIB_PATH, 'Motor.so') in loaded)
 
     def test_create_rtc_corbaloc(self):
         stdout, stderr, ret = call_process(['./rtmgr',
@@ -2857,10 +2857,10 @@ class rtmgrTests(unittest.TestCase):
         self.assertEqual(ret, 0)
         stdout, stderr, ret = call_process(['./rtls',
             'localhost/local.host_cxt/manager.mgr'])
-        self.assert_('Controller0.rtc' in stdout)
+        self.assertTrue('Controller0.rtc' in stdout)
         stdout, stderr, ret = call_process(['./rtls',
             'localhost/local.host_cxt/'])
-        self.assert_('Controller0.rtc' in stdout)
+        self.assertTrue('Controller0.rtc' in stdout)
 
     def test_delete_rtc_corbaloc(self):
         stdout, stderr, ret = call_process(['./rtmgr',
@@ -2870,10 +2870,10 @@ class rtmgrTests(unittest.TestCase):
         self.assertEqual(ret, 0)
         stdout, stderr, ret = call_process(['./rtls',
             'localhost/local.host_cxt/manager.mgr'])
-        self.assert_('Sensor0.rtc' not in stdout)
+        self.assertTrue('Sensor0.rtc' not in stdout)
         stdout, stderr, ret = call_process(['./rtls',
             'localhost/local.host_cxt/'])
-        self.assert_('Sensor0.rtc' not in stdout)
+        self.assertTrue('Sensor0.rtc' not in stdout)
 
     def test_unload_mod_corbaloc(self):
         stdout, stderr, ret = call_process(['./rtmgr',
@@ -2885,7 +2885,7 @@ class rtmgrTests(unittest.TestCase):
         stdout, stderr, ret = call_process(['./rtcat',
             '/localhost/local.host_cxt/manager.mgr'])
         loaded = self._grab_section(stdout, 'Loaded modules:')
-        self.assert_(os.path.join(COMP_LIB_PATH, 'Controller.so') not in loaded)
+        self.assertTrue(os.path.join(COMP_LIB_PATH, 'Controller.so') not in loaded)
 
     def test_load_mod_corbaloc_no_port(self):
         stdout, stderr, ret = call_process(['./rtmgr',
@@ -2897,7 +2897,7 @@ class rtmgrTests(unittest.TestCase):
         stdout, stderr, ret = call_process(['./rtcat',
             '/localhost/local.host_cxt/manager.mgr'])
         loaded = self._grab_section(stdout, 'Loaded modules:')
-        self.assert_(os.path.join(COMP_LIB_PATH, 'Motor.so') in loaded)
+        self.assertTrue(os.path.join(COMP_LIB_PATH, 'Motor.so') in loaded)
 
     def test_load_mod_corbaloc_no_id(self):
         stdout, stderr, ret = call_process(['./rtmgr',
@@ -2909,7 +2909,7 @@ class rtmgrTests(unittest.TestCase):
         stdout, stderr, ret = call_process(['./rtcat',
             '/localhost/local.host_cxt/manager.mgr'])
         loaded = self._grab_section(stdout, 'Loaded modules:')
-        self.assert_(os.path.join(COMP_LIB_PATH, 'Motor.so') in loaded)
+        self.assertTrue(os.path.join(COMP_LIB_PATH, 'Motor.so') in loaded)
 
     def test_load_mod_corbaloc_no_port_or_id(self):
         stdout, stderr, ret = call_process(['./rtmgr',
@@ -2921,7 +2921,7 @@ class rtmgrTests(unittest.TestCase):
         stdout, stderr, ret = call_process(['./rtcat',
             '/localhost/local.host_cxt/manager.mgr'])
         loaded = self._grab_section(stdout, 'Loaded modules:')
-        self.assert_(os.path.join(COMP_LIB_PATH, 'Motor.so') in loaded)
+        self.assertTrue(os.path.join(COMP_LIB_PATH, 'Motor.so') in loaded)
 
 
 def rtmgr_suite():
@@ -2974,21 +2974,21 @@ class rtprintTests(unittest.TestCase):
         time.sleep(3)
         p.terminate()
         stdout, stderr = p.communicate()
-        self.assert_(re.match(r'\[0\.0+\]\s\d+\n', stdout) is not None)
+        self.assertTrue(re.match(r'\[0\.0+\]\s\d+\n', stdout) is not None)
         self.assertEqual(stderr, '')
         self.assertEqual(p.returncode, -15)
 
     def test_print_count_limit(self):
         stdout, stderr, ret = call_process(['./rtprint',
             '/localhost/local.host_cxt/Output0.rtc:out', '-n', '2'])
-        self.assert_(re.match(r'\[0\.0+\]\s\d+\n\[0\.0+\]\s\d+$', stdout) is not None)
+        self.assertTrue(re.match(r'\[0\.0+\]\s\d+\n\[0\.0+\]\s\d+$', stdout) is not None)
         self.assertEqual(stderr, '')
         self.assertEqual(ret, 0)
 
     def test_print_time_limit(self):
         stdout, stderr, ret = call_process(['./rtprint',
             '/localhost/local.host_cxt/Output0.rtc:out', '-t', '1'])
-        self.assert_(re.match(r'\[0\.0+\]\s\d+\n', stdout) is not None)
+        self.assertTrue(re.match(r'\[0\.0+\]\s\d+\n', stdout) is not None)
         self.assertEqual(stderr, '')
         self.assertEqual(ret, 0)
 
@@ -2996,7 +2996,7 @@ class rtprintTests(unittest.TestCase):
         stdout, stderr, ret = call_process(['./rtprint',
             '/localhost/local.host_cxt/C10.rtc:output', '-n', '1',
             '-p', './test', '-m', 'MyData'])
-        self.assert_(re.match(r'MyData\.Bleg\(val1=1L, val2=\d+L\)', stdout) is not None)
+        self.assertTrue(re.match(r'MyData\.Bleg\(val1=1L, val2=\d+L\)', stdout) is not None)
         self.assertEqual(stderr, '')
         self.assertEqual(ret, 0)
 
@@ -3118,7 +3118,7 @@ class rtresurrectTests(unittest.TestCase):
         self.assertEqual(ret, 0)
         stdout, stderr, ret = call_process(['./rtcat', '-l',
             '/localhost/local.host_cxt/Output0.rtc:out'])
-        self.assert_('/localhost/local.host_cxt/Std0.rtc:in' in stdout)
+        self.assertTrue('/localhost/local.host_cxt/Std0.rtc:in' in stdout)
         stdout, stderr, ret = call_process(['./rtconf', '-s', 'set2',
             '/localhost/local.host_cxt/Std0.rtc', 'get', 'param'])
         self.assertEqual(stdout, '42')
@@ -3149,22 +3149,22 @@ class rtresurrectTests(unittest.TestCase):
             './test/sys.rtsys', '--dry-run'])
         self.assertEqual(stderr, '')
         self.assertEqual(ret, 0)
-        self.assert_('Check for required component "RTC:Geoffrey '
+        self.assertTrue('Check for required component "RTC:Geoffrey '
             'Biggs:test:Std:1.0", "Std0" at path '
             '/localhost/local.host_cxt/Std0.rtc (Required)' in stdout)
-        self.assert_('Check for required component "RTC:Geoffrey '
+        self.assertTrue('Check for required component "RTC:Geoffrey '
             'Biggs:Test:Output:1.0", "Output0" at path '
             '/localhost/local.host_cxt/Output0.rtc (Required)' in stdout)
-        self.assert_('Check for required port "in" on component at path '
+        self.assertTrue('Check for required port "in" on component at path '
             '/localhost/local.host_cxt/Std0.rtc (Required)' in stdout)
-        self.assert_('Check for required port "out" on component at path '
+        self.assertTrue('Check for required port "out" on component at path '
             '/localhost/local.host_cxt/Output0.rtc (Required)' in stdout)
-        self.assert_('Connect /localhost/local.host_cxt/Output0.rtc:out to '
+        self.assertTrue('Connect /localhost/local.host_cxt/Output0.rtc:out to '
             '/localhost/local.host_cxt/Std0.rtc:in with ID '
             'connection_id0 and properties' in stdout)
-        self.assert_('Set parameter "param" in set "set2" on component at '
+        self.assertTrue('Set parameter "param" in set "set2" on component at '
             'path /localhost/local.host_cxt/Std0.rtc to "42"' in stdout)
-        self.assert_('Set configuration set "default" active on component at '
+        self.assertTrue('Set configuration set "default" active on component at '
             'path /localhost/local.host_cxt/Std0.rtc' in stdout)
 
     def test_existing_con_diff_id(self):
@@ -3232,9 +3232,9 @@ class rtstartTests(unittest.TestCase):
         stdout, stderr, ret = call_process(['./rtstart', './test/sys.rtsys'])
         self.assertEqual(stdout, '')
         self.assertEqual(ret, 0)
-        self.assert_('Activate /localhost/local.host_cxt/Std0.rtc in '
+        self.assertTrue('Activate /localhost/local.host_cxt/Std0.rtc in '
             'execution context 0 (Required)' in stderr)
-        self.assert_('Activate /localhost/local.host_cxt/Output0.rtc in '
+        self.assertTrue('Activate /localhost/local.host_cxt/Output0.rtc in '
             'execution context 0 (Required)' in stderr)
         stdout, stderr, ret = call_process(['./rtcat',
             '/localhost/local.host_cxt/Std0.rtc'])
@@ -3265,9 +3265,9 @@ class rtstartTests(unittest.TestCase):
         stdout, stderr, ret = call_process(['./rtstart', './test/sys.rtsys'])
         self.assertEqual(stdout, '')
         self.assertEqual(ret, 0)
-        self.assert_('Activate /localhost/local.host_cxt/Std0.rtc in '
+        self.assertTrue('Activate /localhost/local.host_cxt/Std0.rtc in '
             'execution context 0 (Required)' in stderr)
-        self.assert_('Activate /localhost/local.host_cxt/Output0.rtc in '
+        self.assertTrue('Activate /localhost/local.host_cxt/Output0.rtc in '
             'execution context 0 (Required)' in stderr)
         stdout, stderr, ret = call_process(['./rtcat',
             '/localhost/local.host_cxt/Std0.rtc'])
@@ -3283,15 +3283,15 @@ class rtstartTests(unittest.TestCase):
             './test/sys.rtsys', '--dry-run'])
         self.assertEqual(stderr, '')
         self.assertEqual(ret, 0)
-        self.assert_('Check for required component "RTC:Geoffrey '
+        self.assertTrue('Check for required component "RTC:Geoffrey '
             'Biggs:test:Std:1.0", "Std0" at path '
             '/localhost/local.host_cxt/Std0.rtc (Required)' in stdout)
-        self.assert_('Check for required component "RTC:Geoffrey '
+        self.assertTrue('Check for required component "RTC:Geoffrey '
             'Biggs:Test:Output:1.0", "Output0" at path '
             '/localhost/local.host_cxt/Output0.rtc (Required)' in stdout)
-        self.assert_('Activate /localhost/local.host_cxt/Std0.rtc in '
+        self.assertTrue('Activate /localhost/local.host_cxt/Std0.rtc in '
             'execution context 0 (Required)' in stdout)
-        self.assert_('Activate /localhost/local.host_cxt/Output0.rtc in '
+        self.assertTrue('Activate /localhost/local.host_cxt/Output0.rtc in '
             'execution context 0 (Required)' in stdout)
 
 
@@ -3328,9 +3328,9 @@ class rtstopTests(unittest.TestCase):
         stdout, stderr, ret = call_process(['./rtstop', './test/sys.rtsys'])
         self.assertEqual(stdout, '')
         self.assertEqual(ret, 0)
-        self.assert_('Deactivate /localhost/local.host_cxt/Std0.rtc in '
+        self.assertTrue('Deactivate /localhost/local.host_cxt/Std0.rtc in '
             'execution context 0' in stderr)
-        self.assert_('Deactivate /localhost/local.host_cxt/Output0.rtc in '
+        self.assertTrue('Deactivate /localhost/local.host_cxt/Output0.rtc in '
             'execution context 0' in stderr)
         stdout, stderr, ret = call_process(['./rtcat',
             '/localhost/local.host_cxt/Std0.rtc'])
@@ -3342,7 +3342,7 @@ class rtstopTests(unittest.TestCase):
     def test_missing_comp(self):
         stdout, stderr, ret = call_process(['./rtstop', './test/sys.rtsys'])
         self.assertEqual(stdout, '')
-        self.assert_('Action failed: Component missing: '
+        self.assertTrue('Action failed: Component missing: '
             '/localhost/local.host_cxt/Output0.rtc' in stderr)
         self.assertEqual(ret, 0)
 
@@ -3360,9 +3360,9 @@ class rtstopTests(unittest.TestCase):
         stdout, stderr, ret = call_process(['./rtstop', './test/sys.rtsys'])
         self.assertEqual(stdout, '')
         self.assertEqual(ret, 0)
-        self.assert_('Deactivate /localhost/local.host_cxt/Std0.rtc in '
+        self.assertTrue('Deactivate /localhost/local.host_cxt/Std0.rtc in '
             'execution context 0' in stderr)
-        self.assert_('Deactivate /localhost/local.host_cxt/Output0.rtc in '
+        self.assertTrue('Deactivate /localhost/local.host_cxt/Output0.rtc in '
             'execution context 0' in stderr)
         stdout, stderr, ret = call_process(['./rtcat',
             '/localhost/local.host_cxt/Std0.rtc'])
@@ -3378,9 +3378,9 @@ class rtstopTests(unittest.TestCase):
             './test/sys.rtsys', '--dry-run'])
         self.assertEqual(stderr, '')
         self.assertEqual(ret, 0)
-        self.assert_('Deactivate /localhost/local.host_cxt/Std0.rtc in '
+        self.assertTrue('Deactivate /localhost/local.host_cxt/Std0.rtc in '
             'execution context 0' in stdout)
-        self.assert_('Deactivate /localhost/local.host_cxt/Output0.rtc in '
+        self.assertTrue('Deactivate /localhost/local.host_cxt/Output0.rtc in '
             'execution context 0' in stdout)
 
 
@@ -3420,7 +3420,7 @@ class rtteardownTests(unittest.TestCase):
         self.assertEqual(ret, 0)
         stdout, stderr, ret = call_process(['./rtcat', '-l',
             '/localhost/local.host_cxt/Std0.rtc:in'])
-        self.assert_('Connected to' not in stdout)
+        self.assertTrue('Connected to' not in stdout)
 
     def test_missing_comp(self):
         stdout, stderr, ret = call_process(['./rtteardown',
