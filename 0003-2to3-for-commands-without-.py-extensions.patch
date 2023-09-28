@@ -1,0 +1,89 @@
+From 7a2ed977ef3956fa0b3ea618a31c6b7d800ef65d Mon Sep 17 00:00:00 2001
+From: Kei Okada <k-okada@jsk.t.u-tokyo.ac.jp>
+Date: Thu, 28 Sep 2023 18:06:43 +0900
+Subject: [PATCH 3/3] 2to3 for commands (without .py extensions)
+
+---
+ rtcat  | 2 +-
+ rtconf | 2 +-
+ rtfind | 2 +-
+ rtls   | 2 +-
+ rtpwd  | 7 +++----
+ 5 files changed, 7 insertions(+), 8 deletions(-)
+
+diff --git a/rtcat b/rtcat
+index fbd27b5..373fda5 100755
+--- a/rtcat
++++ b/rtcat
+@@ -27,7 +27,7 @@ from rtshell import rtcat
+ if __name__ == '__main__':
+     res, lines = rtcat.main()
+     for l in lines:
+-        print l
++        print(l)
+     sys.exit(res)
+ 
+ # vim: tw=79
+diff --git a/rtconf b/rtconf
+index 5c9c091..7fe4881 100755
+--- a/rtconf
++++ b/rtconf
+@@ -27,7 +27,7 @@ from rtshell import rtconf
+ if __name__ == '__main__':
+     res, lines = rtconf.main()
+     for l in lines:
+-        print l
++        print(l)
+     sys.exit(res)
+ 
+ # vim: tw=79
+diff --git a/rtfind b/rtfind
+index 8b0235a..748c28c 100755
+--- a/rtfind
++++ b/rtfind
+@@ -27,7 +27,7 @@ from rtshell import rtfind
+ if __name__ == '__main__':
+     res, matches = rtfind.main()
+     for m in matches:
+-        print m
++        print(m)
+     sys.exit(res)
+ 
+ 
+diff --git a/rtls b/rtls
+index dfebc34..1a621db 100755
+--- a/rtls
++++ b/rtls
+@@ -27,7 +27,7 @@ from rtshell import rtls
+ if __name__ == '__main__':
+     res, lines = rtls.main()
+     for l in lines:
+-        print l
++        print(l)
+     sys.exit(res)
+ 
+ 
+diff --git a/rtpwd b/rtpwd
+index 3cea936..ff927bd 100755
+--- a/rtpwd
++++ b/rtpwd
+@@ -29,13 +29,12 @@ from rtshell.path import ENV_VAR
+ 
+ def main(argv):
+     if len(argv) > 1 and (argv[1] == '--help' or argv[1] == '-h'):
+-        print >>sys.stderr, \
+-                'Print the name of the current rtshell working directory.'
++        print('Print the name of the current rtshell working directory.', file=sys.stderr)
+         return 0
+     if ENV_VAR in os.environ:
+-        print os.environ[ENV_VAR]
++        print(os.environ[ENV_VAR])
+     else:
+-        print '/'
++        print('/')
+     return 0
+ 
+ 
+-- 
+2.25.1
+
