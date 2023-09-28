@@ -19,7 +19,7 @@ Built-in formatters for rtprint.
 '''
 
 import inspect
-import rts_exceptions
+from . import rts_exceptions
 
 
 ###############################################################################
@@ -49,7 +49,7 @@ def import_formatter(form, modmgr):
         form_rpl = 'fmt.' + form[8:]
     try:
         form_fun = modmgr.evaluate(form_rpl)
-    except Exception, e:
+    except Exception as e:
         raise rts_exceptions.ImportFormatterError(e)
     # Check if the formatter is a function
     if type(form_fun) != type(import_formatter):
