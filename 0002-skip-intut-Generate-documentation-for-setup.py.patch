@@ -1,0 +1,26 @@
+From 217f80fab415e981fef652946ac81cddec9aa96a Mon Sep 17 00:00:00 2001
+From: Kei Okada <k-okada@jsk.t.u-tokyo.ac.jp>
+Date: Thu, 28 Sep 2023 18:00:49 +0900
+Subject: [PATCH 2/2] skip intut('Generate documentation? ') for setup.py
+
+---
+ setup.py | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/setup.py b/setup.py
+index be27e06..a80609a 100644
+--- a/setup.py
++++ b/setup.py
+@@ -43,7 +43,8 @@ def get_files(dir, ext=None):
+ 
+ if sys.platform != 'win32':
+     cwd = os.path.join(os.getcwd(), 'doc')
+-    s = input('Generate documentation? ')
++    #s = input('Generate documentation? ')
++    s = 'y'
+     if s.lower() == 'y' or s.lower() == 'YES':
+         print('Generating documentation')
+         p = subprocess.Popen(['./make_docs', 'man', 'html', 'pdf', '-v'],
+-- 
+2.25.1
+
