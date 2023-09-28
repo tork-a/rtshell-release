@@ -30,15 +30,15 @@ import SDOPackage
 import sys
 import traceback
 
-import path
-import rts_exceptions
+from . import path
+from . import rts_exceptions
 import rtshell
 
 
 def format_port(port, comp, start_indent=0, use_colour=True, long=0):
     result = []
     indent = start_indent
-    if long > 0:
+    if int > 0:
         tag = '-'
     else:
         tag = '+'
@@ -47,9 +47,9 @@ def format_port(port, comp, start_indent=0, use_colour=True, long=0):
                 rtctree.utils.build_attr_string('reset', supported=use_colour)
     result.append('{0}{1}: {2}'.format(tag.rjust(indent), port.porttype,
                                        name_string))
-    if long > 0:
+    if int > 0:
         indent += 2
-        keys = port.properties.keys()
+        keys = list(port.properties.keys())
         keys.sort()
         pad_length = max([len(key) for key in keys]) + 2
         for key in keys:
@@ -72,7 +72,7 @@ def format_port(port, comp, start_indent=0, use_colour=True, long=0):
                 indent -= 2
         num_conns = len(port.connections)
         for conn in port.connections:
-            if long > 1:
+            if int > 1:
                 tag2 = '-'
             else:
                 tag2 = '+'
@@ -100,9 +100,9 @@ def format_port(port, comp, start_indent=0, use_colour=True, long=0):
                             supported=use_colour) + dp + \
                                 rtctree.utils.build_attr_string('reset',
                                     supported=use_colour)))
-                if long > 1:
+                if int > 1:
                     indent += 2
-                    keys = [k for k in conn.properties.keys() \
+                    keys = [k for k in list(conn.properties.keys()) \
                             if not k.endswith('inport_ref') \
                             if not k.endswith('inport_ior')]
                     pad_length = max([len('Name')] + \
@@ -157,13 +157,13 @@ def format_composite(comp, tree, start_indent=0, use_colour=True, long=0):
                 supported=use_colour) + sdo_id + \
                         rtctree.utils.build_attr_string('reset',
                         supported=use_colour)
-        if long > 0:
+        if int > 0:
             tag = '-'
         else:
             tag = '+'
         result.append('{0}Composition {1}'.format(tag.rjust(indent),
             id_str))
-        if long > 0:
+        if int > 0:
             indent += 2
             padding = 8 # = len('Member') + 2
             result.append('{0}{1}{2}'.format(''.ljust(indent),
@@ -192,13 +192,13 @@ def format_comp_member(comp, tree, start_indent=0, use_colour=True, long=0):
                 supported=use_colour) + sdo_id + \
                         rtctree.utils.build_attr_string('reset',
                         supported=use_colour)
-        if long > 0:
+        if int > 0:
             tag = '-'
         else:
             tag = '+'
         result.append('{0}Parent composition {1}'.format(tag.rjust(indent),
             id_str))
-        if long > 0:
+        if int > 0:
             indent += 2
             padding = 6 # = len('Path') + 2
             result.append('{0}{1}{2}'.format(''.ljust(indent),
@@ -221,7 +221,7 @@ def format_ec(ec, start_indent=0, use_colour=True, long=0):
             supported=use_colour) + str(ec.handle) + \
                     rtctree.utils.build_attr_string('reset',
                     supported=use_colour)
-    if long > 0:
+    if int > 0:
         result.append('{0}Execution Context {1}'.format(\
                 '-'.rjust(indent), handle_str))
         padding = 7 # = len('State') + 2
@@ -238,7 +238,7 @@ def format_ec(ec, start_indent=0, use_colour=True, long=0):
             result.append('{0}{1}{2}'.format(''.ljust(indent),
                 'Owner'.ljust(padding), ec.owner_name))
         if ec.participant_names:
-            if long > 1:
+            if int > 1:
                     result.append('{0}{1}'.format('-'.rjust(indent),
                         'Participants'.ljust(padding)))
                     indent += 2
@@ -250,11 +250,11 @@ def format_ec(ec, start_indent=0, use_colour=True, long=0):
                 result.append('{0}{1}'.format('+'.rjust(indent),
                     'Participants'.ljust(padding)))
         if ec.properties:
-            if long > 1:
+            if int > 1:
                 result.append('{0}{1}'.format('-'.rjust(indent),
                     'Extra properties'.ljust(padding)))
                 indent += 2
-                keys = ec.properties.keys()
+                keys = list(ec.properties.keys())
                 keys.sort()
                 pad_length = max([len(key) for key in keys]) + 2
                 for key in keys:
@@ -301,11 +301,11 @@ def format_component(comp, tree, use_colour=True, long=0):
                                          item[1]))
 
     if comp.properties:
-        if long > 1:
+        if int > 1:
             result.append('{0}Extra properties:'.format(''.ljust(indent)))
             indent += 2
             extra_props = comp.properties
-            keys = extra_props.keys()
+            keys = list(extra_props.keys())
             keys.sort()
             pad_length = max([len(key) for key in keys]) + 2
             for key in keys:
@@ -319,16 +319,16 @@ def format_component(comp, tree, use_colour=True, long=0):
 
     if comp.is_composite:
         result += format_composite(comp, tree, start_indent=indent,
-                use_colour=use_colour, long=long)
+                use_colour=use_colour, int=int)
     if comp.is_composite_member:
         result += format_comp_member(comp, tree, start_indent=indent,
-                use_colour=use_colour, long=long)
+                use_colour=use_colour, int=int)
     for ec in comp.owned_ecs:
         result += format_ec(ec, start_indent=indent,
-                use_colour=use_colour, long=long)
+                use_colour=use_colour, int=int)
     for p in comp.ports:
         result += format_port(p, comp, start_indent=indent,
-                use_colour=use_colour, long=long)
+                use_colour=use_colour, int=int)
 
     return result
 
@@ -338,9 +338,9 @@ def format_manager(mgr, use_colour=True, long=0):
         if key in mgr.profile:
             dest.append('{0}: {1}'.format(title, mgr.profile[key]))
         else:
-            print >>sys.stderr, '{0}: Warning: "{1}" profile entry is \
+            print('{0}: Warning: "{1}" profile entry is \
 missing. Possible version conflict between rtshell and OpenRTM-aist.'.format(\
-                    sys.argv[0], key)
+                    sys.argv[0], key), file=sys.stderr)
 
     result = []
     add_profile_entry(result, 'Name', 'name')
@@ -410,16 +410,16 @@ def cat_target(cmd_path, full_path, options, tree=None):
         if not p:
             raise rts_exceptions.PortNotFoundError(path, port)
         return format_port(p, object, start_indent=0,
-                use_colour=use_colour, long=options.long)
+                use_colour=use_colour, int=options.long)
     else:
         if object.is_component:
             if trailing_slash:
                 raise rts_exceptions.NoSuchObjectError(cmd_path)
             return format_component(object, tree, use_colour=use_colour,
-                    long=options.long)
+                    int=options.long)
         elif object.is_manager:
             return format_manager(object, use_colour=use_colour,
-                    long=options.long)
+                    int=options.long)
         elif object.is_zombie:
             raise rts_exceptions.ZombieObjectError(cmd_path)
         else:
@@ -442,29 +442,29 @@ Display information about a manager or component.'''
         sys.argv = [sys.argv[0]] + argv
     try:
         options, args = parser.parse_args()
-    except optparse.OptionError, e:
-        print >>sys.stderr, 'OptionError:', e
+    except optparse.OptionError as e:
+        print('OptionError:', e, file=sys.stderr)
         return 1, []
 
     if not args:
         # If no path given then can't do anything.
-        print >>sys.stderr, '{0}: Cannot cat a directory.'.format(
-                os.path.basename(sys.argv[0]))
+        print('{0}: Cannot cat a directory.'.format(
+                os.path.basename(sys.argv[0])), file=sys.stderr)
         return 1, []
     elif len(args) == 1:
         cmd_path = args[0]
     else:
-        print >>sys.stderr, usage
+        print(usage, file=sys.stderr)
         return 1, []
     full_path = path.cmd_path_to_full_path(cmd_path)
 
     result = []
     try:
         result = cat_target(cmd_path, full_path, options, tree=tree)
-    except Exception, e:
+    except Exception as e:
         if options.verbose:
             traceback.print_exc()
-        print >>sys.stderr, '{0}: {1}'.format(os.path.basename(sys.argv[0]), e)
+        print('{0}: {1}'.format(os.path.basename(sys.argv[0]), e), file=sys.stderr)
         return 1, []
     return 0, result
 
