@@ -1,7 +1,7 @@
-From 7a2ed977ef3956fa0b3ea618a31c6b7d800ef65d Mon Sep 17 00:00:00 2001
+From df8fd01e63b33648a2bc7f1cf8e54b01f2951c15 Mon Sep 17 00:00:00 2001
 From: Kei Okada <k-okada@jsk.t.u-tokyo.ac.jp>
 Date: Thu, 28 Sep 2023 18:06:43 +0900
-Subject: [PATCH 3/3] 2to3 for commands (without .py extensions)
+Subject: [PATCH 3/4] 2to3 for commands (without .py extensions)
 
 ---
  rtcat  | 2 +-

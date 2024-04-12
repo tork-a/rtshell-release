@@ -1,7 +1,7 @@
-From 217f80fab415e981fef652946ac81cddec9aa96a Mon Sep 17 00:00:00 2001
+From 87434c3a7a7144be4bd0df97adc6c40c46c2dc04 Mon Sep 17 00:00:00 2001
 From: Kei Okada <k-okada@jsk.t.u-tokyo.ac.jp>
 Date: Thu, 28 Sep 2023 18:00:49 +0900
-Subject: [PATCH 2/3] skip intut('Generate documentation? ') for setup.py
+Subject: [PATCH 2/4] skip intut('Generate documentation? ') for setup.py
 
 ---
  setup.py | 3 ++-

@@ -1,0 +1,207 @@
+From 1806a8af01a53abc541dfad3df6959341864f470 Mon Sep 17 00:00:00 2001
+From: kirohy <yoshioka@jsk.imi.i.u-tokyo.ac.jp>
+Date: Fri, 12 Apr 2024 19:25:10 +0900
+Subject: [PATCH 4/4] revert 2to3 -f long
+
+---
+ rtshell/rtcat.py  | 38 +++++++++++++++++++-------------------
+ rtshell/rtconf.py |  6 +++---
+ rtshell/rtls.py   |  2 +-
+ 3 files changed, 23 insertions(+), 23 deletions(-)
+
+diff --git a/rtshell/rtcat.py b/rtshell/rtcat.py
+index 4f9a0ee..9ba9a56 100644
+--- a/rtshell/rtcat.py
++++ b/rtshell/rtcat.py
+@@ -38,7 +38,7 @@ import rtshell
+ def format_port(port, comp, start_indent=0, use_colour=True, long=0):
+     result = []
+     indent = start_indent
+-    if int > 0:
++    if long > 0:
+         tag = '-'
+     else:
+         tag = '+'
+@@ -47,7 +47,7 @@ def format_port(port, comp, start_indent=0, use_colour=True, long=0):
+                 rtctree.utils.build_attr_string('reset', supported=use_colour)
+     result.append('{0}{1}: {2}'.format(tag.rjust(indent), port.porttype,
+                                        name_string))
+-    if int > 0:
++    if long > 0:
+         indent += 2
+         keys = list(port.properties.keys())
+         keys.sort()
+@@ -72,7 +72,7 @@ def format_port(port, comp, start_indent=0, use_colour=True, long=0):
+                 indent -= 2
+         num_conns = len(port.connections)
+         for conn in port.connections:
+-            if int > 1:
++            if long > 1:
+                 tag2 = '-'
+             else:
+                 tag2 = '+'
+@@ -100,7 +100,7 @@ def format_port(port, comp, start_indent=0, use_colour=True, long=0):
+                             supported=use_colour) + dp + \
+                                 rtctree.utils.build_attr_string('reset',
+                                     supported=use_colour)))
+-                if int > 1:
++                if long > 1:
+                     indent += 2
+                     keys = [k for k in list(conn.properties.keys()) \
+                             if not k.endswith('inport_ref') \
+@@ -157,13 +157,13 @@ def format_composite(comp, tree, start_indent=0, use_colour=True, long=0):
+                 supported=use_colour) + sdo_id + \
+                         rtctree.utils.build_attr_string('reset',
+                         supported=use_colour)
+-        if int > 0:
++        if long > 0:
+             tag = '-'
+         else:
+             tag = '+'
+         result.append('{0}Composition {1}'.format(tag.rjust(indent),
+             id_str))
+-        if int > 0:
++        if long > 0:
+             indent += 2
+             padding = 8 # = len('Member') + 2
+             result.append('{0}{1}{2}'.format(''.ljust(indent),
+@@ -192,13 +192,13 @@ def format_comp_member(comp, tree, start_indent=0, use_colour=True, long=0):
+                 supported=use_colour) + sdo_id + \
+                         rtctree.utils.build_attr_string('reset',
+                         supported=use_colour)
+-        if int > 0:
++        if long > 0:
+             tag = '-'
+         else:
+             tag = '+'
+         result.append('{0}Parent composition {1}'.format(tag.rjust(indent),
+             id_str))
+-        if int > 0:
++        if long > 0:
+             indent += 2
+             padding = 6 # = len('Path') + 2
+             result.append('{0}{1}{2}'.format(''.ljust(indent),
+@@ -221,7 +221,7 @@ def format_ec(ec, start_indent=0, use_colour=True, long=0):
+             supported=use_colour) + str(ec.handle) + \
+                     rtctree.utils.build_attr_string('reset',
+                     supported=use_colour)
+-    if int > 0:
++    if long > 0:
+         result.append('{0}Execution Context {1}'.format(\
+                 '-'.rjust(indent), handle_str))
+         padding = 7 # = len('State') + 2
+@@ -238,7 +238,7 @@ def format_ec(ec, start_indent=0, use_colour=True, long=0):
+             result.append('{0}{1}{2}'.format(''.ljust(indent),
+                 'Owner'.ljust(padding), ec.owner_name))
+         if ec.participant_names:
+-            if int > 1:
++            if long > 1:
+                     result.append('{0}{1}'.format('-'.rjust(indent),
+                         'Participants'.ljust(padding)))
+                     indent += 2
+@@ -250,7 +250,7 @@ def format_ec(ec, start_indent=0, use_colour=True, long=0):
+                 result.append('{0}{1}'.format('+'.rjust(indent),
+                     'Participants'.ljust(padding)))
+         if ec.properties:
+-            if int > 1:
++            if long > 1:
+                 result.append('{0}{1}'.format('-'.rjust(indent),
+                     'Extra properties'.ljust(padding)))
+                 indent += 2
+@@ -301,7 +301,7 @@ def format_component(comp, tree, use_colour=True, long=0):
+                                          item[1]))
+ 
+     if comp.properties:
+-        if int > 1:
++        if long > 1:
+             result.append('{0}Extra properties:'.format(''.ljust(indent)))
+             indent += 2
+             extra_props = comp.properties
+@@ -319,16 +319,16 @@ def format_component(comp, tree, use_colour=True, long=0):
+ 
+     if comp.is_composite:
+         result += format_composite(comp, tree, start_indent=indent,
+-                use_colour=use_colour, int=int)
++                use_colour=use_colour, long=long)
+     if comp.is_composite_member:
+         result += format_comp_member(comp, tree, start_indent=indent,
+-                use_colour=use_colour, int=int)
++                use_colour=use_colour, long=long)
+     for ec in comp.owned_ecs:
+         result += format_ec(ec, start_indent=indent,
+-                use_colour=use_colour, int=int)
++                use_colour=use_colour, long=long)
+     for p in comp.ports:
+         result += format_port(p, comp, start_indent=indent,
+-                use_colour=use_colour, int=int)
++                use_colour=use_colour, long=long)
+ 
+     return result
+ 
+@@ -410,16 +410,16 @@ def cat_target(cmd_path, full_path, options, tree=None):
+         if not p:
+             raise rts_exceptions.PortNotFoundError(path, port)
+         return format_port(p, object, start_indent=0,
+-                use_colour=use_colour, int=options.long)
++                use_colour=use_colour, long=options.long)
+     else:
+         if object.is_component:
+             if trailing_slash:
+                 raise rts_exceptions.NoSuchObjectError(cmd_path)
+             return format_component(object, tree, use_colour=use_colour,
+-                    int=options.long)
++                    long=options.long)
+         elif object.is_manager:
+             return format_manager(object, use_colour=use_colour,
+-                    int=options.long)
++                    long=options.long)
+         elif object.is_zombie:
+             raise rts_exceptions.ZombieObjectError(cmd_path)
+         else:
+diff --git a/rtshell/rtconf.py b/rtshell/rtconf.py
+index 687e61b..b4d7f56 100644
+--- a/rtshell/rtconf.py
++++ b/rtshell/rtconf.py
+@@ -43,7 +43,7 @@ def is_hidden(name):
+ def format_conf_set(set_name, set, is_active, use_colour, long):
+     result = []
+     indent = 0
+-    if int:
++    if long:
+         tag = '-'
+     else:
+         tag = '+'
+@@ -61,7 +61,7 @@ def format_conf_set(set_name, set, is_active, use_colour, long):
+             title += '  ({0})'.format(set.description)
+     result.append(title)
+ 
+-    if int:
++    if long:
+         params = list(set.data.keys())
+         if params:
+             params.sort()
+@@ -81,7 +81,7 @@ def format_conf_sets(sets, active_set_name, all, use_colour, long):
+     set_keys.sort()
+     for set_name in set_keys:
+         result += format_conf_set(set_name, sets[set_name],
+-            set_name == active_set_name, use_colour, int)
++            set_name == active_set_name, use_colour, long)
+     return result
+ 
+ 
+diff --git a/rtshell/rtls.py b/rtshell/rtls.py
+index d2995d9..843c1f4 100644
+--- a/rtshell/rtls.py
++++ b/rtshell/rtls.py
+@@ -208,7 +208,7 @@ def format_items_list(items):
+ def list_directory(dir_node, long=False):
+     listing = dir_node.children
+     use_colour = rtctree.utils.colour_supported(sys.stdout)
+-    if int:
++    if long:
+         lines = get_node_long_lines(listing, use_colour=use_colour)
+         return lines
+     else:
+-- 
+2.25.1
+
