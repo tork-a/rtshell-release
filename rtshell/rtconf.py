@@ -43,7 +43,7 @@ def is_hidden(name):
 def format_conf_set(set_name, set, is_active, use_colour, long):
     result = []
     indent = 0
-    if int:
+    if long:
         tag = '-'
     else:
         tag = '+'
@@ -61,7 +61,7 @@ def format_conf_set(set_name, set, is_active, use_colour, long):
             title += '  ({0})'.format(set.description)
     result.append(title)
 
-    if int:
+    if long:
         params = list(set.data.keys())
         if params:
             params.sort()
@@ -81,7 +81,7 @@ def format_conf_sets(sets, active_set_name, all, use_colour, long):
     set_keys.sort()
     for set_name in set_keys:
         result += format_conf_set(set_name, sets[set_name],
-            set_name == active_set_name, use_colour, int)
+            set_name == active_set_name, use_colour, long)
     return result
 
 
