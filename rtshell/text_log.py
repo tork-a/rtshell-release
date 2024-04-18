@@ -22,7 +22,7 @@ Text-based log.
 import copy
 import os
 
-from . import ilog
+import ilog
 
 
 ###############################################################################

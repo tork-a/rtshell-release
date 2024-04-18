@@ -127,8 +127,8 @@ Visualise RT Systems using dot files.'''
         sys.argv = [sys.argv[0]] + argv
     try:
         options, args = parser.parse_args()
-    except optparse.OptionError as e:
-        print('OptionError:', e, file=sys.stderr)
+    except optparse.OptionError, e:
+        print >>sys.stderr, 'OptionError:', e
         return 1
 
     if not args:
@@ -136,16 +136,16 @@ Visualise RT Systems using dot files.'''
     elif len(args) == 1:
         profile = args[0]
     else:
-        print(usage, file=sys.stderr)
+        print >>sys.stderr, usage
         return 1
 
     try:
         for l in visualise(profile=profile, xml=options.xml, tree=tree):
-            print(l)
-    except Exception as e:
+            print l
+    except Exception, e:
         if options.verbose:
             traceback.print_exc()
-        print('{0}: {1}'.format(os.path.basename(sys.argv[0]), e), file=sys.stderr)
+        print >>sys.stderr, '{0}: {1}'.format(os.path.basename(sys.argv[0]), e)
         return 1
     return 0
 

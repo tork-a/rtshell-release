@@ -27,8 +27,8 @@ import rtctree.path
 import sys
 import traceback
 
-from . import path
-from . import rts_exceptions
+import path
+import rts_exceptions
 import rtshell
 
 
@@ -68,10 +68,10 @@ def delete_all_zombies(options, tree=None):
     def del_zombie(node, args):
         try:
             node.parent.unbind(node.name)
-        except Exception as e:
+        except Exception, e:
             if options.verbose:
                 traceback.print_exc()
-            print('{0}: {1}'.format(sys.argv[0], e), file=sys.stderr)
+            print >>sys.stderr, '{0}: {1}'.format(sys.argv[0], e)
     tree.iterate(del_zombie, filter=['is_zombie'])
 
 
@@ -90,14 +90,14 @@ Delete an object from a name server.'''
         sys.argv = [sys.argv[0]] + argv
     try:
         options, args = parser.parse_args()
-    except optparse.OptionError as e:
-        print('OptionError:', e, file=sys.stderr)
+    except optparse.OptionError, e:
+        print >>sys.stderr, 'OptionError:', e
         return 1
 
     try:
         if not args:
             if not options.zombies:
-                print('{0}: No path given.'.format(sys.argv[0]), file=sys.stderr)
+                print >>sys.stderr, '{0}: No path given.'.format(sys.argv[0])
                 return 1
             else:
                 # If no path given, delete all zombies found
@@ -106,17 +106,17 @@ Delete an object from a name server.'''
             full_path = path.cmd_path_to_full_path(args[0])
             # Some sanity checks
             if full_path == '/':
-                print('{0}: Cannot delete the root '\
-                        'directory.'.format(sys.argv[0]), file=sys.stderr)
+                print >>sys.stderr, '{0}: Cannot delete the root '\
+                        'directory.'.format(sys.argv[0])
                 return 1
             delete_object_reference(args[0], full_path, options, tree)
         else:
-            print(usage, file=sys.stderr)
+            print >>sys.stderr, usage
             return 1
-    except Exception as e:
+    except Exception, e:
         if options.verbose:
             traceback.print_exc()
-        print('{0}: {1}'.format(os.path.basename(sys.argv[0]), e), file=sys.stderr)
+        print >>sys.stderr, '{0}: {1}'.format(os.path.basename(sys.argv[0]), e)
         return 1
     return 0
 

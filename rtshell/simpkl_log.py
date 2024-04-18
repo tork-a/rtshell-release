@@ -24,7 +24,7 @@ import os
 import pickle
 import traceback
 
-from . import ilog
+import ilog
 
 
 ###############################################################################

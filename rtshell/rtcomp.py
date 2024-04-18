@@ -30,11 +30,10 @@ import SDOPackage__POA
 import sys
 import traceback
 
-from . import path
-from . import rtmgr
-from . import rts_exceptions
+import path
+import rtmgr
+import rts_exceptions
 import rtshell
-from functools import reduce
 
 
 def parse_member_paths(source_paths):
@@ -97,7 +96,8 @@ def add_to_composition(comp, rtcs, tree, verbose):
             p_name = rtcs[rtc][0].instance_name + '.' + p
             if p_name not in new_ports:
                 if verbose:
-                    print('Exporting port {0} from composition'.format(p_name), file=sys.stderr)
+                    print >>sys.stderr, \
+                            'Exporting port {0} from composition'.format(p_name)
                 new_ports.append(p_name)
     if new_ports:
         new_ports = reduce(lambda x, y: x + ',' + y, new_ports)
@@ -109,12 +109,14 @@ def add_to_composition(comp, rtcs, tree, verbose):
         c = rtcs[rtc][0]
         if not comp.is_member(c):
             if verbose:
-                print('Adding component {0} to composition'.format(rtc), file=sys.stderr)
+                print >>sys.stderr, \
+                        'Adding component {0} to composition'.format(rtc)
             to_add.append(c)
         elif verbose and not rtcs[rtc][1]:
             # Only print this message if the component didn't have any ports to
             # add
-            print('Component {0} is already in composition'.format(rtc), file=sys.stderr)
+            print >>sys.stderr, \
+                    'Component {0} is already in composition'.format(rtc)
     comp.add_members(to_add)
 
 
@@ -131,11 +133,13 @@ def rem_from_composition(comp, rtcs, tree, verbose):
             p_name = inst_name + '.' + p
             if p_name in new_ports:
                 if verbose:
-                    print('Hiding port {0} in composition'.format(p_name), file=sys.stderr)
+                    print >>sys.stderr, \
+                            'Hiding port {0} in composition'.format(p_name)
                 new_ports.remove(p_name)
             elif verbose:
-                print('Port {0} is already hidden in composition'.format(
-                                p_name), file=sys.stderr)
+                print >>sys.stderr, \
+                        'Port {0} is already hidden in composition'.format(
+                                p_name)
     if new_ports:
         new_ports = reduce(lambda x, y: x + ',' + y, new_ports)
     else:
@@ -151,10 +155,12 @@ def rem_from_composition(comp, rtcs, tree, verbose):
         c = rtcs[rtc][0]
         if comp.is_member(c):
             if verbose:
-                print('Removing component {0} from composition'.format(rtc), file=sys.stderr)
+                print >>sys.stderr, \
+                        'Removing component {0} from composition'.format(rtc)
             to_remove.append(c)
         elif verbose:
-            print('Component {0} is not in composition'.format(rtc), file=sys.stderr)
+            print >>sys.stderr, \
+                    'Component {0} is not in composition'.format(rtc)
     comp.remove_members(to_remove)
 
 
@@ -201,21 +207,21 @@ def manage_composition(tgt_raw_path, tgt_full_path, options, tree=None):
                 raise rts_exceptions.CannotRemoveFromNewCompositionError()
             # No composition exists in this manager; make a new one
             if options.verbose:
-                print('Creating new composition {0}'.format(
-                        tgt_raw_path), file=sys.stderr)
+                print >>sys.stderr, 'Creating new composition {0}'.format(
+                        tgt_raw_path)
             comp = create_composition(tgt_obj, tgt_suffix, options.options,
                     options.type)
         elif options.verbose:
-            print('Editing existing composition {0}'.format(
-                    tgt_raw_path), file=sys.stderr)
+            print >>sys.stderr, 'Editing existing composition {0}'.format(
+                    tgt_raw_path)
     elif tgt_obj.is_component:
         # Edit composition - there should be no suffix
         if tgt_suffix:
             raise rts_exceptions.NotAComponentError(tgt_raw_path)
         comp = tgt_obj
         if options.verbose:
-            print('Editing existing composition {0}'.format(
-                    tgt_raw_path), file=sys.stderr)
+            print >>sys.stderr, 'Editing existing composition {0}'.format(
+                    tgt_raw_path)
     else:
         raise rts_exceptions.NotAComponentOrManagerError(tgt_raw_path)
     if not comp.is_composite:
@@ -228,8 +234,8 @@ def manage_composition(tgt_raw_path, tgt_full_path, options, tree=None):
         rem_from_composition(comp, rem_rtcs, tree, options.verbose)
     if not comp.members[comp.organisations[0].org_id]:
         if options.verbose:
-            print('Composition {0} has no members'.format(
-                    tgt_raw_path), file=sys.stderr)
+            print >>sys.stderr, 'Composition {0} has no members'.format(
+                    tgt_raw_path)
 
 
 def main(argv=None, tree=None):
@@ -258,22 +264,22 @@ Manage composite components.'''
         sys.argv = [sys.argv[0]] + argv
     try:
         options, args = parser.parse_args()
-    except optparse.OptionError as e:
-        print('OptionError:', e, file=sys.stderr)
+    except optparse.OptionError, e:
+        print >>sys.stderr, 'OptionError:', e
         return 1
 
     if len(args) != 1:
-        print('{0}: No manager or existing composite component '\
-            'specified.'.format(sys.argv[0]), file=sys.stderr)
+        print >>sys.stderr, '{0}: No manager or existing composite component '\
+            'specified.'.format(sys.argv[0])
         return 1
     full_path = path.cmd_path_to_full_path(args[0])
 
     try:
         manage_composition(args[0], full_path, options, tree=tree)
-    except Exception as e:
+    except Exception, e:
         if options.verbose:
             traceback.print_exc()
-        print('{0}: {1}'.format(sys.argv[0], e), file=sys.stderr)
+        print >>sys.stderr, '{0}: {1}'.format(sys.argv[0], e)
         return 1
     return 0
 
