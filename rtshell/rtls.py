@@ -208,7 +208,7 @@ def format_items_list(items):
 def list_directory(dir_node, long=False):
     listing = dir_node.children
     use_colour = rtctree.utils.colour_supported(sys.stdout)
-    if int:
+    if long:
         lines = get_node_long_lines(listing, use_colour=use_colour)
         return lines
     else:
