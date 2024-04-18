@@ -1,0 +1,12 @@
+Source: ros-noetic-rtshell
+Section: misc
+Priority: optional
+Maintainer: Kei Okada <k-okada@jsk.t.u-tokyo.ac.jp>
+Build-Depends: debhelper (>= 9.0.0), omniidl-python, python-omniorb, python-omniorb-omg, python3-setuptools, ros-noetic-catkin
+Homepage: http://ros.org/wiki/openrtm_tools
+Standards-Version: 3.9.2
+
+Package: ros-noetic-rtshell
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ros-noetic-rtctree, ros-noetic-rtsprofile
+Description: Shell commands for managing RT-Middleware running on OpenRTM-aist.
