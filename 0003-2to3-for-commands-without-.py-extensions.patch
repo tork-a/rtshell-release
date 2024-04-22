@@ -1,4 +1,4 @@
-From 984b44dd4a08bab5b252e842a510329b26f42188 Mon Sep 17 00:00:00 2001
+From f5b45ae9ea47bc6e47d7749e19cf0c8ae2e65efd Mon Sep 17 00:00:00 2001
 From: Kei Okada <k-okada@jsk.t.u-tokyo.ac.jp>
 Date: Thu, 28 Sep 2023 18:06:43 +0900
 Subject: [PATCH 3/5] 2to3 for commands (without .py extensions)
