@@ -1,7 +1,7 @@
-From 3453f1bc7c7e588aa18bafff5ed98602e6c3172a Mon Sep 17 00:00:00 2001
+From c628e94f138039c160c1b7b5e5f1c19adff67968 Mon Sep 17 00:00:00 2001
 From: Kei Okada <k-okada@jsk.t.u-tokyo.ac.jp>
 Date: Thu, 18 Apr 2024 10:44:54 +0900
-Subject: [PATCH 4/4] revert 2to3 -f long, becasue rtshell use long as
+Subject: [PATCH 4/5] revert 2to3 -f long, becasue rtshell use long as
  variable, not function
 
 thanks to @kirohy, https://github.com/tork-a/rtshell-release/pull/5/files
@@ -205,5 +205,5 @@ index d2995d9..843c1f4 100644
          return lines
      else:
 -- 
-2.17.1
+2.25.1
 
