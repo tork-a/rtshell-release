@@ -27,9 +27,9 @@ import rtsprofile.rts_profile
 import sys
 import traceback
 
-from . import actions
-from . import option_store
-from . import rts_exceptions
+import actions
+import option_store
+import rts_exceptions
 import rtshell
 
 
@@ -46,7 +46,7 @@ class SystemNotOKCB(rtshell.actions.BaseCallback):
 
     def __call__(self, result, err_msg):
         if err_msg:
-            print(err_msg, file=sys.stderr)
+            print >>sys.stderr, err_msg
         if not result:
             self._failed = True
 
@@ -164,7 +164,7 @@ def check(profile=None, xml=True, state='Active', dry_run=False, tree=None):
             check_configs(rtsp, cb) + check_states(rtsp, state, cb))
     if dry_run:
         for a in actions:
-            print(a)
+            print a
     else:
         if not tree:
             # Load the RTC Tree, using the paths from the profile
@@ -200,8 +200,8 @@ Check that the running RT System conforms to an RTSProfile.'''
         sys.argv = [sys.argv[0]] + argv
     try:
         options, args = parser.parse_args()
-    except optparse.OptionError as e:
-        print('OptionError: ', e, file=sys.stderr)
+    except optparse.OptionError, e:
+        print >>sys.stderr, 'OptionError: ', e
         return 1
     rtshell.option_store.OptionStore().verbose = options.verbose
 
@@ -210,17 +210,17 @@ Check that the running RT System conforms to an RTSProfile.'''
     elif len(args) == 1:
         profile = args[0]
     else:
-        print(usage, file=sys.stderr)
+        print >>sys.stderr, usage
         return 1
 
     try:
         if not check(profile=profile, xml=options.xml, state=options.state,
                 dry_run=options.dry_run, tree=tree):
             return 1
-    except Exception as e:
+    except Exception, e:
         if options.verbose:
             traceback.print_exc()
-        print('{0}: {1}'.format(sys.argv[0], e), file=sys.stderr)
+        print >>sys.stderr, '{0}: {1}'.format(sys.argv[0], e)
         return 1
     return 0
 

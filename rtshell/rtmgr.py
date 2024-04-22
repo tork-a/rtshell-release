@@ -36,8 +36,8 @@ import sys
 import traceback
 
 import rtshell
-from . import rts_exceptions
-from . import path
+import rts_exceptions
+import path
 
 
 class DirectManager(object):
@@ -56,7 +56,7 @@ class DirectManager(object):
             raise rts_exceptions.BadMgrAddressError
         try:
             self._mgr = self._obj._narrow(RTM.Manager)
-        except omniORB.CORBA.TRANSIENT as e:
+        except omniORB.CORBA.TRANSIENT, e:
             if e.args[0] == omniORB.TRANSIENT_ConnectFailed:
                 raise rts_exceptions.BadMgrAddressError
             else:
@@ -88,7 +88,7 @@ class DirectManager(object):
         try:
             if self._mgr.load_module(path, init_func) != RTC.RTC_OK:
                 raise rtctree.exceptions.FailedToLoadModuleError(path)
-        except omniORB.CORBA.UNKNOWN as e:
+        except omniORB.CORBA.UNKNOWN, e:
             if e.args[0] == UNKNOWN_UserException:
                 raise rtctree.exceptions.FailedToLoadModuleError(path,
                         'CORBA User Exception')
@@ -191,8 +191,8 @@ Create and remove components with a manager.'''
     options, args = parser.parse_args()
 
     if len(args) != 1:
-        print('{0}: No manager specified.'.format(
-                os.path.basename(sys.argv[0])), file=sys.stderr)
+        print >>sys.stderr, '{0}: No manager specified.'.format(
+                os.path.basename(sys.argv[0]))
         return 1
 
     try:
@@ -205,16 +205,16 @@ Create and remove components with a manager.'''
             tree, mgr = get_manager(args[0], full_path, tree)
 
         if not hasattr(options, 'cmds'):
-            print('{0}: No commands specified.'.format(
-                    os.path.basename(sys.argv[0])), file=sys.stderr)
+            print >>sys.stderr, '{0}: No commands specified.'.format(
+                    os.path.basename(sys.argv[0]))
             return 1
 
         for c in options.cmds:
             c[0](mgr, c[1])
-    except Exception as e:
+    except Exception, e:
         if options.verbose:
             traceback.print_exc()
-        print('{0}: {1}'.format(os.path.basename(sys.argv[0]), e), file=sys.stderr)
+        print >>sys.stderr, '{0}: {1}'.format(os.path.basename(sys.argv[0]), e)
         return 1
     return 0
 

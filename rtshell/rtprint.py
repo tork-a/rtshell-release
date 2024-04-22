@@ -30,11 +30,11 @@ import traceback
 import OpenRTM_aist
 import RTC
 
-from . import comp_mgmt
-from . import modmgr
-from . import path
-from . import port_types
-from . import rtprint_comp
+import comp_mgmt
+import modmgr
+import path
+import port_types
+import rtprint_comp
 import rtshell
 
 
@@ -44,15 +44,16 @@ def read_from_ports(raw_paths, options, tree=None):
     mm = modmgr.ModuleMgr(verbose=options.verbose, paths=options.paths)
     mm.load_mods_and_poas(options.modules)
     if options.verbose:
-        print('Pre-loaded modules: {0}'.format(mm.loaded_mod_names), file=sys.stderr)
+        print >>sys.stderr, \
+                'Pre-loaded modules: {0}'.format(mm.loaded_mod_names)
     if options.timeout == -1:
         max = options.max
         if options.verbose:
-            print('Will run {0} times.'.format(max), file=sys.stderr)
+            print >>sys.stderr, 'Will run {0} times.'.format(max)
     else:
         max = -1
         if options.verbose:
-            print('Will stop after {0}s'.format(options.timeout), file=sys.stderr)
+            print >>sys.stderr, 'Will stop after {0}s'.format(options.timeout)
 
     targets = port_types.parse_targets(raw_paths)
     if not tree:
@@ -61,13 +62,14 @@ def read_from_ports(raw_paths, options, tree=None):
     port_specs = port_types.make_port_specs(targets, mm, tree)
     port_types.require_all_input(port_specs)
     if options.verbose:
-        print('Port specifications: {0}'.format([str(p) for p in port_specs]), file=sys.stderr)
+        print >>sys.stderr, \
+                'Port specifications: {0}'.format([str(p) for p in port_specs])
 
     comp_name, mgr = comp_mgmt.make_comp('rtprint_reader', tree,
             rtprint_comp.Reader, port_specs, event=event, rate=options.rate,
             max=max)
     if options.verbose:
-        print('Created component {0}'.format(comp_name), file=sys.stderr)
+        print >>sys.stderr, 'Created component {0}'.format(comp_name)
     comp = comp_mgmt.find_comp_in_mgr(comp_name, mgr)
     comp_mgmt.connect(comp, port_specs, tree)
     comp_mgmt.activate(comp)
@@ -82,7 +84,7 @@ def read_from_ports(raw_paths, options, tree=None):
             comp_mgmt.deactivate(comp)
         else:
             while True:
-                input()
+                raw_input()
             # The manager will catch the Ctrl-C and shut down itself, so don't
             # disconnect/deactivate the component
     except KeyboardInterrupt:
@@ -125,21 +127,21 @@ Print the data being sent by one or more output ports.'''
         sys.argv = [sys.argv[0]] + argv
     try:
         options, args = parser.parse_args()
-    except optparse.OptionError as e:
-        print('OptionError:', e, file=sys.stderr)
+    except optparse.OptionError, e:
+        print >>sys.stderr, 'OptionError:', e
         return 1
 
     if len(args) < 1:
-        print(usage, file=sys.stderr)
+        print >>sys.stderr, usage
         return 1
 
     try:
         read_from_ports(
                 [path.cmd_path_to_full_path(p) for p in args], options, tree)
-    except Exception as e:
+    except Exception, e:
         if options.verbose:
             traceback.print_exc()
-        print('{0}: {1}'.format(os.path.basename(sys.argv[0]), e), file=sys.stderr)
+        print >>sys.stderr, '{0}: {1}'.format(os.path.basename(sys.argv[0]), e)
         return 1
     return 0
 

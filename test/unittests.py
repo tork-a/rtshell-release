@@ -61,7 +61,7 @@ class TestEvalConst(unittest.TestCase):
 
     def test_replace_time(self):
         const = 'blurgle({time})'
-        self.assertTrue(len(rtshell.eval_const.replace_time(const)) > len(const))
+        self.assert_(len(rtshell.eval_const.replace_time(const)) > len(const))
 
     def test_eval_const(self):
         class Data(object):

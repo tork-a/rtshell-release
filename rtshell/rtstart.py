@@ -29,10 +29,10 @@ import rtsprofile.rts_profile
 import sys
 import traceback
 
-from . import actions
-from . import option_store
-from . import plan
-from . import rts_exceptions
+import actions
+import option_store
+import plan
+import rts_exceptions
 import rtshell
 
 
@@ -89,8 +89,8 @@ def start(profile=None, xml=True, dry_run=False, tree=None):
             rtctree.component.Component.ACTIVE)
     if dry_run:
         for a in checks:
-            print(a)
-        print(p)
+            print a
+        print p
     else:
         if not tree:
             # Load the RTC Tree, using the paths from the profile
@@ -124,8 +124,8 @@ Start an RT system using an RTSProfile.'''
         sys.argv = [sys.argv[0]] + argv
     try:
         options, args = parser.parse_args()
-    except optparse.OptionError as e:
-        print('OptionError: ', e, file=sys.stderr)
+    except optparse.OptionError, e:
+        print >>sys.stderr, 'OptionError: ', e
         return 1
     option_store.OptionStore().verbose = options.verbose
 
@@ -134,16 +134,16 @@ Start an RT system using an RTSProfile.'''
     elif len(args) == 1:
         profile = args[0]
     else:
-        print(usage, file=sys.stderr)
+        print >>sys.stderr, usage
         return 1
 
     try:
         start(profile=profile, xml=options.xml, dry_run=options.dry_run,
                 tree=tree)
-    except Exception as e:
+    except Exception, e:
         if options.verbose:
             traceback.print_exc()
-        print('{0}: {1}'.format(os.path.basename(sys.argv[0]), e), file=sys.stderr)
+        print >>sys.stderr, '{0}: {1}'.format(os.path.basename(sys.argv[0]), e)
         return 1
     return 0
 

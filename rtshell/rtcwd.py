@@ -27,8 +27,8 @@ import rtctree.path
 import sys
 import traceback
 
-from . import path
-from . import rts_exceptions
+import path
+import rts_exceptions
 
 if sys.platform == 'win32':
     SET_CMD = 'set'
@@ -69,7 +69,7 @@ def main(argv=None, tree=None):
         sys.argv = [sys.argv[0]] + argv
     if len(sys.argv) < 2:
         # Change to the root dir
-        print('{0} {1}{3}{2}/{2}'.format(SET_CMD, path.ENV_VAR, QUOTE, EQUALS))
+        print '{0} {1}{3}{2}/{2}'.format(SET_CMD, path.ENV_VAR, QUOTE, EQUALS)
         return 0
 
     # Take the first argument only
@@ -79,9 +79,9 @@ def main(argv=None, tree=None):
         if cmd_path == '.' or cmd_path == './':
             # Special case for '.': do nothing
             if path.ENV_VAR in os.environ:
-                print(make_cmd_line(os.environ[path.ENV_VAR]))
+                print make_cmd_line(os.environ[path.ENV_VAR])
             else:
-                print(make_cmd_line('/'))
+                print make_cmd_line('/')
         elif cmd_path == '..' or cmd_path == '../':
             # Special case for '..': go up one directory
             if path.ENV_VAR in os.environ and os.environ[path.ENV_VAR] and \
@@ -90,14 +90,14 @@ def main(argv=None, tree=None):
                         :os.environ[path.ENV_VAR].rstrip('/').rfind('/')]
                 if not parent:
                     parent = '/'
-                print(make_cmd_line(parent))
+                print make_cmd_line(parent)
             else:
-                print(make_cmd_line('/'))
+                print make_cmd_line('/')
         else:
             full_path = path.cmd_path_to_full_path(cmd_path)
-            print(cd(cmd_path, full_path))
-    except Exception as e:
-        print('rtcwd: {0}'.format(e), file=sys.stderr)
+            print cd(cmd_path, full_path)
+    except Exception, e:
+        print >>sys.stderr, 'rtcwd: {0}'.format(e)
         return 1
     return 0
 

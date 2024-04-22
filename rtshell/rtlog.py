@@ -31,15 +31,15 @@ import traceback
 import OpenRTM_aist
 import RTC
 
-from . import comp_mgmt
-from . import modmgr
-from . import path
-from . import port_types
-from . import rtlog_comps
-from . import rts_exceptions
+import comp_mgmt
+import modmgr
+import path
+import port_types
+import rtlog_comps
+import rts_exceptions
 import rtshell
-from . import simpkl_log
-from . import text_log
+import simpkl_log
+import text_log
 
 
 def record_log(raw_paths, options, tree=None):
@@ -48,26 +48,27 @@ def record_log(raw_paths, options, tree=None):
     if options.end is not None and options.end < 0:
         raise rts_exceptions.BadEndPointError
     if options.end is None and options.index:
-        print('{0}: WARNING: --index has no effect without '\
-                '--end'.format(os.path.basename(sys.argv[0])), file=sys.stderr)
+        print >>sys.stderr, '{0}: WARNING: --index has no effect without '\
+                '--end'.format(os.path.basename(sys.argv[0]))
 
     mm = modmgr.ModuleMgr(verbose=options.verbose, paths=options.paths)
     mm.load_mods_and_poas(options.modules)
     if options.verbose:
-        print('Pre-loaded modules: {0}'.format(mm.loaded_mod_names), file=sys.stderr)
+        print >>sys.stderr, \
+                'Pre-loaded modules: {0}'.format(mm.loaded_mod_names)
 
     if options.timeout is not None:
-        print('Recording for {0}s.'.format(options.timeout), file=sys.stderr)
+        print >>sys.stderr, 'Recording for {0}s.'.format(options.timeout)
     else:
         if options.end is not None:
             if options.index:
-                print('Recording {0} entries.'.format(
-                        int(options.end)), file=sys.stderr)
+                print >>sys.stderr, 'Recording {0} entries.'.format(
+                        int(options.end))
             else:
                 end_str = time.strftime('%Y-%m-%d %H:%M:%S',
                         time.localtime(options.end))
-                print('Recording until {0} ({1}).'.format(
-                        end_str, options.end), file=sys.stderr)
+                print >>sys.stderr, 'Recording until {0} ({1}).'.format(
+                        end_str, options.end)
 
     if options.logger == 'simpkl':
         l_type = simpkl_log.SimplePickleLog
@@ -83,7 +84,8 @@ def record_log(raw_paths, options, tree=None):
     port_specs = port_types.make_port_specs(sources, mm, tree)
     port_types.require_all_input(port_specs)
     if options.verbose:
-        print('Port specifications: {0}'.format([str(p) for p in port_specs]), file=sys.stderr)
+        print >>sys.stderr, \
+                'Port specifications: {0}'.format([str(p) for p in port_specs])
 
     if options.end is None:
         end = -1 # Send -1 as the default
@@ -95,12 +97,12 @@ def record_log(raw_paths, options, tree=None):
             lims_are_ind=options.index, end=end,
             verbose=options.verbose, rate=options.exec_rate)
     if options.verbose:
-        print('Created component {0}'.format(comp_name), file=sys.stderr)
+        print >>sys.stderr, 'Created component {0}'.format(comp_name)
     try:
         comp = comp_mgmt.find_comp_in_mgr(comp_name, mgr)
         comp_mgmt.connect(comp, port_specs, tree)
         comp_mgmt.activate(comp)
-    except Exception as e:
+    except Exception, e:
         #comp_mgmt.shutdown(mgr)
         raise e
     try:
@@ -114,7 +116,7 @@ def record_log(raw_paths, options, tree=None):
             comp_mgmt.deactivate(comp)
         else:
             while True:
-                input()
+                raw_input()
             # The manager will catch the Ctrl-C and shut down itself, so don't
             # disconnect/deactivate the component
     except KeyboardInterrupt:
@@ -136,48 +138,49 @@ def play_log(raw_paths, options, tree=None):
     if options.end is not None and options.end < 0:
         raise rts_exceptions.BadEndPointError
     if options.end is None and options.start is None and options.index:
-        print('{0}: WARNING: --index has no effect without '\
-                '--start or --end'.format(os.path.basename(sys.argv[0])), file=sys.stderr)
+        print >>sys.stderr, '{0}: WARNING: --index has no effect without '\
+                '--start or --end'.format(os.path.basename(sys.argv[0]))
 
     mm = modmgr.ModuleMgr(verbose=options.verbose, paths=options.paths)
     mm.load_mods_and_poas(options.modules)
     if options.verbose:
-        print('Pre-loaded modules: {0}'.format(mm.loaded_mod_names), file=sys.stderr)
+        print >>sys.stderr, \
+                'Pre-loaded modules: {0}'.format(mm.loaded_mod_names)
 
     if options.timeout is not None:
-        print('Playing for {0}s.'.format(options.timeout), file=sys.stderr)
+        print >>sys.stderr, 'Playing for {0}s.'.format(options.timeout)
     else:
         if options.end is not None:
             if options.start is not None:
                 if options.index:
-                    print('Playing from entry {0} to entry '\
-                            '{1}.'.format(int(options.start), int(options.end)), file=sys.stderr)
+                    print >>sys.stderr, 'Playing from entry {0} to entry '\
+                            '{1}.'.format(int(options.start), int(options.end))
                 else:
                     start_str = time.strftime('%Y-%m-%d %H:%M:%S',
                             time.localtime(options.start))
                     end_str = time.strftime('%Y-%m-%d %H:%M:%S',
                             time.localtime(options.end))
-                    print('Playing from {0} ({1}) until {2} '\
+                    print >>sys.stderr, 'Playing from {0} ({1}) until {2} '\
                             '({3}).'.format(start_str, options.start, end_str,
-                                    options.end), file=sys.stderr)
+                                    options.end)
             else:
                 if options.index:
-                    print('Playing {0} entries.'.format(
-                            int(options.end)), file=sys.stderr)
+                    print >>sys.stderr, 'Playing {0} entries.'.format(
+                            int(options.end))
                 else:
                     end_str = time.strftime('%Y-%m-%d %H:%M:%S',
                             time.localtime(options.end))
-                    print('Playing until {0} ({1}).'.format(
-                            end_str, options.end), file=sys.stderr)
+                    print >>sys.stderr, 'Playing until {0} ({1}).'.format(
+                            end_str, options.end)
         elif options.start is not None:
             if options.index:
-                print('Playing from entry {0}.'.format(
-                        int(options.start)), file=sys.stderr)
+                print >>sys.stderr, 'Playing from entry {0}.'.format(
+                        int(options.start))
             else:
                 start_str = time.strftime('%Y-%m-%d %H:%M:%S',
                         time.localtime(options.start))
-                print('Playing from {0} ({1}).'.format(start_str,
-                        options.start), file=sys.stderr)
+                print >>sys.stderr, 'Playing from {0} ({1}).'.format(start_str,
+                        options.start)
 
     if options.logger == 'simpkl':
         l_type = simpkl_log.SimplePickleLog
@@ -192,7 +195,8 @@ def play_log(raw_paths, options, tree=None):
         tree = rtctree.tree.RTCTree(paths=paths, filter=paths)
     port_specs = port_types.make_port_specs(targets, mm, tree)
     if options.verbose:
-        print('Port specifications: {0}'.format([str(p) for p in port_specs]), file=sys.stderr)
+        print >>sys.stderr, \
+                'Port specifications: {0}'.format([str(p) for p in port_specs])
     port_types.require_all_output(port_specs)
 
     if options.start is None:
@@ -210,7 +214,7 @@ def play_log(raw_paths, options, tree=None):
             ignore_times=options.ig_times, verbose=options.verbose,
             rate=options.exec_rate)
     if options.verbose:
-        print('Created component {0}'.format(comp_name), file=sys.stderr)
+        print >>sys.stderr, 'Created component {0}'.format(comp_name)
     comp = comp_mgmt.find_comp_in_mgr(comp_name, mgr)
     comp_mgmt.connect(comp, port_specs, tree)
     comp_mgmt.activate(comp)
@@ -262,7 +266,8 @@ def display_info(options):
     mm = modmgr.ModuleMgr(verbose=options.verbose, paths=options.paths)
     mm.load_mods_and_poas(options.modules)
     if options.verbose:
-        print('Pre-loaded modules: {0}'.format(mm.loaded_mod_names), file=sys.stderr)
+        print >>sys.stderr, \
+                'Pre-loaded modules: {0}'.format(mm.loaded_mod_names)
 
     statinfo = os.stat(options.filename)
     size = statinfo.st_size
@@ -286,19 +291,19 @@ def display_info(options):
     end_time_str = time.strftime('%Y-%m-%d %H:%M:%S',
             time.localtime(end_time.float))
 
-    print('Name: {0}'.format(options.filename))
-    print('Size: ' + size_str)
-    print('Start time: {0} ({1})'.format(start_time_str, start_time))
-    print('First entry time: {0} ({1})'.format(first_time_str, first_time))
-    print('End time: {0} ({1})'.format(end_time_str, end_time))
-    print('Number of entries: {0}'.format(end_ind + 1))
+    print 'Name: {0}'.format(options.filename)
+    print 'Size: ' + size_str
+    print 'Start time: {0} ({1})'.format(start_time_str, start_time)
+    print 'First entry time: {0} ({1})'.format(first_time_str, first_time)
+    print 'End time: {0} ({1})'.format(end_time_str, end_time)
+    print 'Number of entries: {0}'.format(end_ind + 1)
     for ii, p in enumerate(port_specs):
-        print('Channel {0}'.format(ii + 1))
-        print('  Name: {0}'.format(p.name))
-        print('  Data type: {0} ({1})'.format(p.type_name, p.type))
-        print('  Sources:')
+        print 'Channel {0}'.format(ii + 1)
+        print '  Name: {0}'.format(p.name)
+        print '  Data type: {0} ({1})'.format(p.type_name, p.type)
+        print '  Sources:'
         for r in p.raw:
-            print('    {0}'.format(r))
+            print '    {0}'.format(r)
 
 
 def main(argv=None, tree=None):
@@ -372,12 +377,12 @@ Record data from output ports, or replay data into input ports.'''
         sys.argv = [sys.argv[0]] + argv
     try:
         options, args = parser.parse_args()
-    except optparse.OptionError as e:
-        print('OptionError:', e, file=sys.stderr)
+    except optparse.OptionError, e:
+        print >>sys.stderr, 'OptionError:', e
         return 1
 
     if len(args) < 1 and not options.display_info:
-        print(usage, file=sys.stderr)
+        print >>sys.stderr, usage
         return 1
 
     try:
@@ -389,10 +394,10 @@ Record data from output ports, or replay data into input ports.'''
         else:
             record_log([path.cmd_path_to_full_path(p) for p in args],
                     options, tree)
-    except Exception as e:
+    except Exception, e:
         if options.verbose:
             traceback.print_exc()
-        print('{0}: {1}'.format(os.path.basename(sys.argv[0]), e), file=sys.stderr)
+        print >>sys.stderr, '{0}: {1}'.format(os.path.basename(sys.argv[0]), e)
         return 1
     return 0
 
