@@ -172,7 +172,7 @@ class Log(object):
     def __iter__(self):
         return self
 
-    def __next__(self):
+    def next(self):
         d = self.read()
         if not d:
             raise StopIteration
@@ -361,5 +361,5 @@ class Log(object):
     def _vb_print(self, string):
         '''Print verbose information when self._vb is True.'''
         if self._vb:
-            print(string, file=sys.stderr)
+            print >>sys.stderr, string
 

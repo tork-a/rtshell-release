@@ -28,7 +28,7 @@ import RTC
 import sys
 import time
 
-from . import rts_exceptions
+import rts_exceptions
 
 
 ###############################################################################
@@ -84,7 +84,7 @@ class ModuleMgr(object):
     def _add_paths(self, paths=[]):
         for p in paths:
             if self._verb:
-                print('Adding {0} to PYTHONPATH'.format(p), file=sys.stderr)
+                print >>sys.stderr, 'Adding {0} to PYTHONPATH'.format(p)
             sys.path.insert(0, p)
 
     def evaluate(self, expr):
@@ -93,7 +93,7 @@ class ModuleMgr(object):
         if not repl_expr:
             raise rts_exceptions.EmptyConstExprError
         if self._verb:
-            print('Evaluating expression {0}'.format(repl_expr), file=sys.stderr)
+            print >>sys.stderr, 'Evaluating expression {0}'.format(repl_expr)
         const = eval(repl_expr)
         return const
 
@@ -110,12 +110,12 @@ class ModuleMgr(object):
         self._auto_import(name)
         # Strip the name down to the class
         name = _find_object_name(name)
-        for m in list(self._mods.values()):
+        for m in self._mods.values():
             if m.name == 'RTC':
                 # Search RTC last to allow user types to override RTC types
                 continue
             types = [member for member in inspect.getmembers(m.mod,
-                    inspect.isclass) if member[0] == name or "IDL:"+list(self._mods.keys())[0]+"/"+member[0]+":1.0" == name]
+                    inspect.isclass) if member[0] == name or "IDL:"+self._mods.keys()[0]+"/"+member[0]+":1.0" == name]
             if len(types) == 0:
                 continue
             elif len(types) != 1:
@@ -123,12 +123,12 @@ class ModuleMgr(object):
             else:
                 # Check for the POA module
                 if m.name != 'RTC':
-                    if not [other_m for other_m in list(self._mods.values()) \
+                    if not [other_m for other_m in self._mods.values() \
                             if other_m.name == m.name + '__POA']:
                         raise rts_exceptions.MissingPOAError(m.name)
                 if self._verb:
-                    print('Found type {0} in module {1}'.format(
-                            name, m.name), file=sys.stderr)
+                    print >>sys.stderr, 'Found type {0} in module {1}'.format(
+                            name, m.name)
                 return types[0][1]
         # If got to here, the type was not found in any other module, so search
         # the RTC module
@@ -139,8 +139,8 @@ class ModuleMgr(object):
             if len(types) != 1:
                 raise rts_exceptions.AmbiguousTypeError(type_name)
             if self._verb:
-                print('Found type {0} in module {1}'.format(
-                        name, m.name), file=sys.stderr)
+                print >>sys.stderr, 'Found type {0} in module {1}'.format(
+                        name, m.name)
             return types[0][1]
         raise rts_exceptions.TypeNotFoundError(name)
 
@@ -168,13 +168,13 @@ class ModuleMgr(object):
             try:
                 self.load_mod(m + '__POA')
             except ImportError:
-                print('{0}: Failed to import module {1}'.format(\
-                        os.path.basename(sys.argv[0]), m + '__POA'), file=sys.stderr)
+                print >>sys.stderr, '{0}: Failed to import module {1}'.format(\
+                        os.path.basename(sys.argv[0]), m + '__POA')
                 pass
 
     @property
     def loaded_mod_names(self):
-        return list(self._mods.keys())
+        return self._mods.keys()
 
     def _auto_import(self, expr):
         '''Tries to import all module names found in an expression.
@@ -184,20 +184,22 @@ class ModuleMgr(object):
         '''
         names = [m for m in _find_module_names(expr) if m not in self._mods]
         if self._verb:
-            print('Automatically importing modules {0}'.format(
-                    names), file=sys.stderr)
+            print >>sys.stderr, 'Automatically importing modules {0}'.format(
+                    names)
         for n in names:
             try:
                 self.load_mod(n)
             except ImportError:
-                print('{0}: Warning: failed to import module {1}'.format(
-                                os.path.basename(sys.argv[0]), n), file=sys.stderr)
+                print >>sys.stderr, \
+                        '{0}: Warning: failed to import module {1}'.format(
+                                os.path.basename(sys.argv[0]), n)
                 continue
             try:
                 self.load_mod(n + '__POA')
             except ImportError:
-                print('{0}: Warning: failed to import module {1}'.format(
-                                os.path.basename(sys.argv[0]), n + '__POA'), file=sys.stderr)
+                print >>sys.stderr, \
+                        '{0}: Warning: failed to import module {1}'.format(
+                                os.path.basename(sys.argv[0]), n + '__POA')
                 continue
 
     def _repl_mod_name(self, expr):
