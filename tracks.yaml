@@ -134,7 +134,7 @@ tracks:
     last_version: 3.0.1
     name: upstream
     patches: indigo
-    release_inc: '3'
+    release_inc: '4'
     release_repo_url: null
     release_tag: v3.0.1
     ros_distro: noetic
